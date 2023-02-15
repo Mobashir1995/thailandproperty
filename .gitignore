@@ -1,0 +1,15 @@
+
+wp-admin/
+wp-content/*
+wp-includes/
+vendor
+node_modules
+.htaccess
+index.php
+license.txt
+readme.html
+wp-*.php
+xmlrpc.php
+
+# !wp-content/plugins/hvac-sizing-calculator
+!wp-content/themes
