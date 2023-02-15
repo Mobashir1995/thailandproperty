@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<ruleset name="CS">
+	<description>WordPress Coding Standards for ThailandProperty.</description>
+
+	<file>.</file>
+
+	<!-- Configs -->
+
+	<!-- Exclude the Node Modules directory. -->
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+
+	<!-- Exclude Vendor directory. -->
+	<exclude-pattern>vendor/*</exclude-pattern>
+
+	<!-- Exclude Javascript files. -->
+	<exclude-pattern>*.js</exclude-pattern>
+
+	<!-- Exclude CSS files. -->
+	<exclude-pattern>*.css</exclude-pattern>
+
+	<exclude-pattern>layouts/*</exclude-pattern>
+	<exclude-pattern>ultimate-member/*</exclude-pattern>
+	<exclude-pattern>woocommerce/*</exclude-pattern>
+	<exclude-pattern>footer.php</exclude-pattern>
+	<exclude-pattern>functions.php</exclude-pattern>
+	<exclude-pattern>header.php</exclude-pattern>
+	<exclude-pattern>inc/option-fields.php</exclude-pattern>
+	<exclude-pattern>inc/shortcodes.php</exclude-pattern>
+
+	<!-- WordPress minimum version check. -->
+	<config name="minimum_supported_wp_version" value="5.8"/>
+
+	<!-- Loads the PHP Compatibility ruleset. -->
+	<rule ref="PHPCompatibilityWP" />
+
+	<!-- PHP version check. -->
+	<config name="testVersion" value="7.4-" />
+
+	<!-- Rules -->
+	<rule ref="WordPress">
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+	</rule>
+
+	<arg name="colors"/>
+	<arg value="p"/>
+
+</ruleset>
