@@ -1,0 +1,6 @@
+{
+	"devDependencies": {
+		"grunt": "^1.5.3",
+		"jshint": "^2.13.6"
+	}
+}
