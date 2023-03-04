@@ -17,6 +17,44 @@ Template: houzez
 
 /* Your CSS code goes here
 -------------------------------------- */
+.bg-violet{
+	background-color: #641482 !important;
+}
+.bg-hover-black:hover,
+.dashboard_prop_button_container > label input[type="radio"]:checked + .bg-hover-black,
+.dashboard_prop_button_container > label input[type="checkbox"]:checked + .bg-hover-black{
+	background-color: #000 !important;
+	border-color: #000 !important;
+}
 .page-template-user_dashboard_submit #find_coordinates{
 	display: none;
 }
+.dashboard_property_type .form-group > label,
+.dashboard_property_status .form-group > label,
+.dashboard_property_label .form-group > label{
+	display: block;
+}
+.dashboard_prop_button_container > label{
+	display: inline-block;
+	margin-right: 5px;
+}
+
+.dashboard_prop_button_container > label input[type="radio"],
+.dashboard_prop_button_container > label input[type="checkbox"]{
+	display: none;
+}
+.dashboard_prop_button_container label{
+	font-weight: 400;
+}
+
+/* half map
+/* ------------------------------------------------------------------------ */
+@media (max-width: 768px) {
+	#map-view-wrap {
+	  display: block;
+	}
+	#half-map-listing-area {
+		display: none;
+	}
+}
+  

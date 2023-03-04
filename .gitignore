@@ -10,6 +10,10 @@ license.txt
 readme.html
 wp-*.php
 xmlrpc.php
+vendors
+node_modules
+composer.lock
+package-lock.json
 
 # !wp-content/plugins/hvac-sizing-calculator
-!wp-content/themes
+!wp-content/themes/
