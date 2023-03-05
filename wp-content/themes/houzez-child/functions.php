@@ -8,6 +8,7 @@ function pd_register_widgets(){
     require_once( get_stylesheet_directory() . '/elementor/property-card-v6.php' );
     require_once( get_stylesheet_directory() . '/elementor/property-card-v1.php' );
     require_once( get_stylesheet_directory() . '/elementor/booking-map-widget.php' );
+    require_once( get_stylesheet_directory() . '/elementor/property-carousel-v1.php' );
 }
 
 /*-----------------------------------------------------------------------------------*/

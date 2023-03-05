@@ -47,6 +47,30 @@ Template: houzez
 	font-weight: 400;
 }
 
+/* Property Cards Carousel */
+.pd-slick-dot-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -25px;
+	position: relative;
+    z-index: 99999;
+}
+.pd-slick-dot-lists .slick-dots{
+    position: relative;
+    bottom: inherit;
+}
+.pd-slick-dot-prev i,
+.pd-slick-dot-next i{
+    font-size: 32px;
+    cursor: pointer;
+    margin-top: 4px;
+}
+.property-carousel-module .slick-prev,
+.property-carousel-module .slick-next {
+	display: inline-block !important;
+}
+
 /* half map
 /* ------------------------------------------------------------------------ */
 @media (max-width: 768px) {
