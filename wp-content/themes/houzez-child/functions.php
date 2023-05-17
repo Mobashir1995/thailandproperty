@@ -196,3 +196,4 @@ if(!function_exists('houzez_taxonomy_hirarchical_options_for_search')){
 }
 
 require_once get_stylesheet_directory() . '/inc/helper-functions.php';
+require_once get_stylesheet_directory() . '/inc/property-functions.php';
