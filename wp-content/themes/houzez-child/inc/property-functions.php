@@ -219,7 +219,7 @@ if ( !function_exists( 'houzez_get_auto_complete_search' ) ) {
                     <li class="list-group-item" data-text="<?php echo $term->name; ?>">
                         <div class="d-flex align-items-center">
                             <div class="auto-complete-image-wrap">
-                                <a href="<?php echo get_term_link( $term ); ?>">
+                                <a href="<?php echo $taxonomy_url; ?>">
                                     <?php echo $term_img; ?>
                                 </a>    
                             </div><!-- auto-complete-image-wrap -->
