@@ -4,7 +4,7 @@ Theme URI: http://www.favethemes.com/
 Author: Favethemes
 Author URI: http://www.favethemes.com/
 Description: Houzez is a premium WordPress theme for real estate agents where modern aesthetics are combined with tasteful simplicity, and where the ease of use is achieved without compromise in your ability to customise the design. Whether you are a real estate agent looking to build a website for your company or a web developer seeking a perfect WordPress theme for your next project, you are certain to appreciate the numerous features and benefits that our theme provides.
-Version: 1.0
+Version: 1.0.2
 Tags: white, right-sidebar, left-sidebar, custom-colors, custom-menu, featured-images, post-formats, theme-options, translation-ready
 License: GNU General Public License version 3.0
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -45,6 +45,16 @@ Template: houzez
 }
 .dashboard_prop_button_container label{
 	font-weight: 400;
+}
+
+/*	Search Builder Form CSS */
+#auto_complete_ajax .list-group-item{
+	padding: 0;
+}
+#auto_complete_ajax .list-group-item a{
+	text-decoration: none;
+	display: block;
+	padding: 15px;
 }
 
 /* Property Cards Carousel */

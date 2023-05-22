@@ -18,6 +18,7 @@ function houzez_child_enqueue_scripts(){
     if ( is_page_template('template/user_dashboard_submit.php') ) {
         wp_enqueue_script('houzezz-child-dashboard-submit', get_stylesheet_directory_uri() . '/js/dashboard-user-submit.js', array('jquery'), HOUZEZZ_CHILD_VERSION, true);
     }
+    wp_enqueue_script('houzezz-child-js', get_stylesheet_directory_uri() . '/js/theme.js', array('jquery'), HOUZEZZ_CHILD_VERSION, true);
 }
 add_action( 'wp_enqueue_scripts', 'houzez_child_enqueue_scripts' );
 
