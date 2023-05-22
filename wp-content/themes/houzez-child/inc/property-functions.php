@@ -217,27 +217,29 @@ if ( !function_exists( 'houzez_get_auto_complete_search' ) ) {
 
                     ?>
                     <li class="list-group-item" data-text="<?php echo $term->name; ?>">
-                        <div class="d-flex align-items-center">
-                            <div class="auto-complete-image-wrap">
-                                <a href="<?php echo $taxonomy_url; ?>">
-                                    <?php echo $term_img; ?>
-                                </a>    
-                            </div><!-- auto-complete-image-wrap -->
-                            <div class="auto-complete-content-wrap flex-fill ml-3">
-                                <div class="auto-complete-title"><?php echo esc_attr($term->name); ?></div>
-                                <ul class="item-amenities">
-                                    <li><?php if ( !empty( $term_type ) ) { ?>
-                                    <?php echo $term_type; ?>
-                                <?php } ?>
-                                <?php if ( !empty( $prop_count ) ) : ?>
-                                     - <?php echo $prop_count . ' ' . $houzez_local['auto_listings']; ?>
-                                <?php endif; ?></li>
-                                </ul>
-                            </div><!-- auto-complete-content-wrap -->
-                            <div class="auto-complete-content-wrap ml-3">
-                                <a target="_blank" href="<?php echo $taxonomy_url; ?>" class="search-result-view"><?php echo $houzez_local['auto_view_lists']; ?></a>
-                            </div><!-- auto-complete-content-wrap -->
-                        </div><!-- d-flex -->
+                        <a href="<?php echo $taxonomy_url; ?>" >
+                            <div class="d-flex align-items-center">
+                                <div class="auto-complete-image-wrap">
+                                    
+                                        <?php echo $term_img; ?>
+                                    
+                                </div><!-- auto-complete-image-wrap -->
+                                <div class="auto-complete-content-wrap flex-fill ml-3">
+                                    <div class="auto-complete-title"><?php echo esc_attr($term->name); ?></div>
+                                    <ul class="item-amenities">
+                                        <li><?php if ( !empty( $term_type ) ) { ?>
+                                        <?php echo $term_type; ?>
+                                    <?php } ?>
+                                    <?php if ( !empty( $prop_count ) ) : ?>
+                                        - <?php echo $prop_count . ' ' . $houzez_local['auto_listings']; ?>
+                                    <?php endif; ?></li>
+                                    </ul>
+                                </div><!-- auto-complete-content-wrap -->
+                                <div class="auto-complete-content-wrap ml-3">
+                                    <u class="search-result-view"><?php echo $houzez_local['auto_view_lists']; ?></u>
+                                </div><!-- auto-complete-content-wrap -->
+                            </div><!-- d-flex -->
+                        </a>
                     </li>
                     <?php
 
