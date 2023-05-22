@@ -188,7 +188,14 @@ if ( !function_exists( 'houzez_get_auto_complete_search' ) ) {
                     $term_type = $term_type[1];
                     $prop_count = $term->count;
 
-                    $taxonomy_url = get_field('city_url', $term->taxonomy . '_' . $term->term_id);
+                    $taxonomy_url = '';
+                    if( $term->taxonomy === 'property_state' ){
+                        $taxonomy_url = get_field('state_url', $term->taxonomy . '_' . $term->term_id);
+                    }elseif( $term->taxonomy === 'property_city' ){
+                        $taxonomy_url = get_field('city_url', $term->taxonomy . '_' . $term->term_id);
+                    }elseif( $term->taxonomy === 'property_area' ){
+                        $taxonomy_url = get_field('area_url', $term->taxonomy . '_' . $term->term_id);
+                    }
 
                     if( !wp_http_validate_url( $taxonomy_url ) ) {
                         $taxonomy_url = get_term_link( $term );
