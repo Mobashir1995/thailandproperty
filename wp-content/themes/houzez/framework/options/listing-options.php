@@ -267,16 +267,16 @@ Redux::setSection( $houzez_opt_name, array(
 ));
 
 Redux::setSection( $houzez_opt_name, array(
-    'title'  => esc_html__( 'Meta v1 and v4', 'houzez' ),
+    'title'  => esc_html__( 'Meta v1, v4 and v7', 'houzez' ),
     'id'     => 'lisitngs-meta-v1v4',
-    'desc'   => esc_html__( 'Manage list or grid (grid v.1 and v.4) meta type on the listing pages', 'houzez' ),
+    'desc'   => esc_html__( 'Manage list or grid (grid v.1, v.4 and v.7) meta type on the listing pages', 'houzez' ),
     'subsection' => true,
     'fields'  => array(
         array(
             'id'       => 'v1_4_meta_type',
             'type'     => 'select',
-            'title'    => esc_html__('Meta Type v1 and v4', 'houzez'),
-            'subtitle' => esc_html__('This option only works on the list view and grid v.1 and v.4', 'houzez'),
+            'title'    => esc_html__('Meta Type v1, v4 and v7', 'houzez'),
+            'subtitle' => esc_html__('This option only works on the list view and grid v.1, v.4 and v.7', 'houzez'),
             'desc' => esc_html__('Select meta type', 'houzez'),
             'options'  => array(
                 'icons'   => esc_html__( 'Icons', 'houzez' ),

@@ -60,15 +60,6 @@ function houzez_schedule_checks() {
 }
 add_action( 'init', 'houzez_schedule_checks' );
 
-/*add_action( 'houzez_check_cron', 'houzez_check_cron' );
-function houzez_check_cron() {
-    
-    $args = array();
-
-    $user_email = 'sales@favethemes.com';
-
-    houzez_email_type( $user_email, 'membership_cancelled', $args );
-}*/
 
 /*-----------------------------------------------------------------------------------*/
 // Schedule daily membership check
@@ -98,37 +89,42 @@ if( !function_exists('houzez_per_listing_expire_check') ) {
 
                 $args = array(
                     'post_type' => 'property',
-                    'post_status' => 'publish'
+                    'fields'          => 'ids', // Only get post IDs
+                    'posts_per_page'  => -1,
+                    'numberposts' => -1
                 );
 
-                $prop_selection = new WP_Query($args);
-                while ($prop_selection->have_posts()): $prop_selection->the_post();
+                $prop_selection = get_posts($args);
+               
+                foreach($prop_selection as $the_id) {
 
-                    $the_id = get_the_ID();
                     $prop_listed_date = strtotime(get_the_date("Y-m-d g:i:s", $the_id));
 
                     $houzez_manual_expire = get_post_meta( $the_id, 'houzez_manual_expire', true );
-
+                    
                     // Check if manual expire date enable
                     if( empty( $houzez_manual_expire )) {
+                        
                         $expiration_date = $prop_listed_date + $per_listing_expiration * 24 * 60 * 60;
+                        
                         $today = strtotime(date( 'Y-m-d g:i:s', current_time( 'timestamp', 0 ) ));
-
+                        
                         $user_id = houzez_get_author_by_post_id($the_id);
                         $user = new WP_User($user_id); //administrator
                         $user_role = $user->roles[0];
 
                         if ($user_role != 'administrator') {
-                            if ($expiration_date < $today) {
+                            
+                            if ($expiration_date < $today) {                        
                                 houzez_listing_set_to_expire($the_id);
                             }
                         }
                     }
 
-                endwhile;
+                }
 
             }
-        }
+        } // Enabled
 
     }
 }
@@ -145,19 +141,21 @@ if( ! function_exists('houzez_check_featured_listing_status') ) {
 
             if ( $featured_listing_expiration != 0 && $featured_listing_expiration != '' ) {
 
-                $args = array(
+               $args = array(
                     'post_type' => 'property',
-                    'post_status' => 'publish'
+                    'fields'          => 'ids', // Only get post IDs
+                    'posts_per_page'  => -1,
+                    'numberposts' => -1
                 );
 
-                $prop_selection = new WP_Query($args);
-                while ($prop_selection->have_posts()): $prop_selection->the_post();
+                $prop_selection = get_posts($args);
+                
+                foreach($prop_selection as $the_id) {
 
-                    $the_id = get_the_ID();
                     $prop_featured_date = get_post_meta( $the_id, 'houzez_featured_listing_date', true );
                     $prop_featured_date = strtotime($prop_featured_date);
-
-
+                    $is_featured = get_post_meta( $the_id, 'fave_featured', true );
+                    
                     $expiration_date = $prop_featured_date + $featured_listing_expiration * 24 * 60 * 60;
                     $today = strtotime(date( 'Y-m-d g:i:s', current_time( 'timestamp', 0 ) ));
 
@@ -165,7 +163,7 @@ if( ! function_exists('houzez_check_featured_listing_status') ) {
                     $user = new WP_User($user_id); //administrator
                     $user_role = $user->roles[0];
 
-                    if ($user_role != 'administrator') {
+                    if ($user_role != 'administrator' && $is_featured != 0 ) {
                         if ($expiration_date < $today) {
                             
                             update_post_meta($the_id, 'fave_featured', '0');
@@ -181,11 +179,11 @@ if( ! function_exists('houzez_check_featured_listing_status') ) {
                         }
                     }
 
-                endwhile;
+                }
 
             }
 
-        }
+        } // end enabled
     }
     add_action( 'houzez_check_featured_listing_expiry', 'houzez_check_featured_listing_status' );
 }

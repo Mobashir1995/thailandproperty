@@ -228,10 +228,19 @@ if( !function_exists('houzez20_half_map_listings') ) {
         
         $properties_data = array();
         $query_args = new WP_Query( $search_qry );
+
+        $deck_start = $deck_end = '';
+
+        if( $item_layout != 'list-v7' ) {
+            $deck_start = '<div class="card-deck">';
+            $deck_end   = '</div>';
+        }
+
         
         ob_start();
 
-        echo '<div class="card-deck">';
+        echo $deck_start;
+
         $total_properties = $query_args->found_posts;
 
         while( $query_args->have_posts() ): $query_args->the_post();
@@ -310,7 +319,7 @@ if( !function_exists('houzez20_half_map_listings') ) {
         endwhile;
 
         wp_reset_query();
-        echo '</div>';
+        echo $deck_end;
 
         echo '<div class="clearfix"></div>';
         houzez_ajax_pagination( $query_args->max_num_pages );
@@ -1167,7 +1176,7 @@ if( !function_exists('houzez_half_map_search_hidden_fields')) {
     function houzez_half_map_search_hidden_fields() {
         global $post;
         
-        if(is_page_template(array('template/property-listings-map.php'))) {
+        if( is_page_template(array('template/property-listings-map.php')) ) {
             
             $search_builder = houzez_search_builder();
 
@@ -1236,7 +1245,8 @@ if( !function_exists('houzez_half_map_search_hidden_fields')) {
                     
                 }
             }
-
+        } else if( is_page_template(array('template/template-search.php')) && houzez_option('search_result_page') == 'half_map' ) {
+            echo '<input type="hidden" class="hz-halfmap-paged" name="paged" value=""/>';
         }
 
     }

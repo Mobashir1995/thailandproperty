@@ -36,10 +36,24 @@ if( !function_exists('houzez_register_user_with_membership') ) {
            
         } else {
             $user_role = apply_filters( 'houzez_user_role_with_membership', get_option( 'default_role' ) );
+
+            if( $user_role == 'administrator' ) {
+                $user_role = 'subscriber';
+            }
             
             if( isset( $_POST['user_role'] ) && in_array( $_POST['user_role'], $user_roles ) ) {
                 $user_role = isset( $_POST['user_role'] ) ? sanitize_text_field( wp_kses( $_POST['user_role'], $allowed_html ) ) : $user_role;
             }
+        }
+
+        if( houzez_option('header_register') != 1 ) {
+            echo json_encode( array( 'success' => false, 'msg' => esc_html__('Access denied.', 'houzez') ) );
+            wp_die();
+        }
+
+        if( get_option('users_can_register') != 1 ) {
+            echo json_encode( array( 'success' => false, 'msg' => esc_html__('Access denied.', 'houzez') ) );
+            wp_die();
         }
 
         if( empty( $username ) ) {
@@ -795,6 +809,8 @@ if( !function_exists('houzez_stripe_payment_membership') ) {
 
         if( $submission_currency == 'JPY') {
             $package_price_for_stripe = $pack_price;
+        } else if( $submission_currency == 'BHD' || $submission_currency == 'KWD' ) {
+            $package_price_for_stripe = round($pack_price * 100) * 10;
         } else {
             $package_price_for_stripe = $pack_price * 100;
         }
@@ -820,7 +836,7 @@ if( !function_exists('houzez_stripe_payment_membership') ) {
     }
 }
 /* -----------------------------------------------------------------------------------------------------------
-*  Stripe Form Per Listing - Depricated since v2.3.9
+*  Stripe Form Per Listing - Deprecated since v2.3.9
 -------------------------------------------------------------------------------------------------------------*/
 if( !function_exists('houzez_stripe_payment_perlisting') ) {
     function houzez_stripe_payment_perlisting( $postID, $price_submission, $price_featured_submission ) {
@@ -845,6 +861,8 @@ if( !function_exists('houzez_stripe_payment_perlisting') ) {
 
         if ($submission_currency == 'JPY') {
             $price_submission_total = $price_submission_total;
+        } else if( $submission_currency == 'BHD' || $submission_currency == 'KWD' ) {
+            $package_price_for_stripe = round($price_submission_total * 100) * 10;
         } else {
             $price_submission_total = $price_submission_total * 100;
         }
@@ -852,12 +870,16 @@ if( !function_exists('houzez_stripe_payment_perlisting') ) {
         if( isset($_GET['upgrade_id']) && $_GET['upgrade_id'] != '' ) {
             if( $submission_currency == 'JPY') {
                 $price_submission = $price_featured_submission;
+            } else if( $submission_currency == 'BHD' || $submission_currency == 'KWD' ) {
+                $package_price_for_stripe = round($price_featured_submission * 100) * 10;
             } else {
                 $price_submission = $price_featured_submission * 100;
             }
         } else {
             if( $submission_currency == 'JPY') {
                 $price_submission = $price_submission;
+            } else if( $submission_currency == 'BHD' || $submission_currency == 'KWD' ) {
+                $price_submission = round($price_submission * 100) * 10;
             } else {
                 $price_submission = $price_submission * 100;
             }
@@ -953,6 +975,8 @@ if( ! function_exists( 'houzez_stripe_create_plan' ) ) {
 
             if( in_array( $submission_currency, houzez_stripe_zero_decimal_currencies() ) ) {
                 $package_price_for_stripe = $package_price;
+            } else if( in_array( $submission_currency, houzez_stripe_3digits_currencies() ) ) {
+                $package_price_for_stripe = round($package_price * 100) * 10;
             } else {
                 $package_price_for_stripe = round( $package_price * 100, 2 );
             }
@@ -1055,6 +1079,8 @@ if( ! function_exists( 'houzez_stripe_package_payment' ) ) {
 
                 if( in_array( $currency, houzez_stripe_zero_decimal_currencies() ) ) {
                     $amount = $amount;
+                } else if( in_array( $currency, houzez_stripe_3digits_currencies() ) ) {
+                    $amount = round($amount * 100) * 10;
                 } else {
                     $amount = round( $amount * 100, 2 );
                 }
@@ -1179,6 +1205,8 @@ if( !function_exists('houzez_property_stripe_payment') ) {
 
         if( in_array( $submission_currency, houzez_stripe_zero_decimal_currencies() ) ) {
             $total_price = $total_price;
+        } else if( in_array( $submission_currency, houzez_stripe_3digits_currencies() ) ) {
+            $total_price = round($total_price * 100) * 10;
         } else {
             $total_price = round( $total_price * 100, 2 );
         }

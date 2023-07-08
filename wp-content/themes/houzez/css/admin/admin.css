@@ -34,10 +34,7 @@ input[type=color], input[type=date], input[type=datetime-local], input[type=date
     opacity: 1;
 }
 
-.attachment-thumbnail-small {
-    height: 75px;
-    width: 75px;
-}
+
 #addtag .houzez_full_width .rwmb-label {
     width: 100%;
 }
@@ -224,10 +221,7 @@ img.fave-img-select { border: 2px solid #eee; cursor: pointer; border-radius: 4p
 img.fave-img-select.selected {border: 2px solid #0074a2;}
 ul.fave-img-select-wrap {float: left; width: 100%; display: block; margin: 5px 0;}
 ul.fave-img-select-wrap li {float: left; margin-right: 1px;}
-.attachment-thumbnail-small {
-    height: 75px;
-    width: 75px;
-}
+
 
 /***************************************************************************************
 *   Page/Post Meta CSS
@@ -660,4 +654,11 @@ div#extendify-templates-inserter {
 .rwmb-image-actions {
     opacity: 1 !important;
 }
-}               
+}   
+
+.redux-container .redux_field_th {
+    padding: 20px 10px 20px 0 !important;
+}     
+.redux-container .redux-main .redux-field-container {
+    padding: 20px 0 !important;
+}   

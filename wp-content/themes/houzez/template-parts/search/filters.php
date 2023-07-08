@@ -41,7 +41,7 @@ if( houzez_is_price_range_search() && !houzez_search_style() ) {
 if( houzez_search_style() && array_key_exists('price', $layout) ) {
 	unset($layout['min-price'], $layout['max-price']);
 }
-$advanced_fields = array_slice($layout, houzez_search_builder_first_row());
+$advanced_fields = array_slice($layout, houzez_search_builder_first_row()); 
 unset($advanced_fields['price']);
 ?>
 

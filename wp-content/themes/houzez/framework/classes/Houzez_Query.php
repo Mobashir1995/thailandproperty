@@ -70,7 +70,7 @@ if(!class_exists('Houzez_Query')) {
                     array(
                         'key'       =>  'fave_agent_agencies',
                         'value'     => $agency_id,
-                        'compare'   => 'LIKE',
+                        'compare'   => '=',
                     ),
                 ),
             );
@@ -244,6 +244,55 @@ if(!class_exists('Houzez_Query')) {
         }
 
         /**
+         * Sets agency agents properties into loop
+         *
+         * @access public
+         * @param null|int $agent_ids
+         * @return WP_Query
+         */
+        public static function get_agent_properties_ids_by_agent_id( $agent_id = 0 ) {
+        
+
+            $property_ids = array();
+            
+            if ( empty( $agent_id ) ) {
+                return $property_ids;
+            }
+
+            $args = array(
+                'post_type'         => 'property',
+                'posts_per_page'    => -1,
+                'post_status' => 'publish',
+                'meta_query' => array(
+                    'relation' => 'AND',
+                    array(
+                        'key' => 'fave_agents',
+                        'value' => $agent_id,
+                        'compare' => '='
+                    ),
+                    array(
+                        'key' => 'fave_agent_display_option',
+                        'value' => 'agent_info',
+                        'compare' => '='
+                    )
+                )
+            );
+
+            $qry = new WP_Query( $args );
+
+            if( $qry->have_posts() ):
+                while( $qry->have_posts() ):
+                    $qry->the_post();
+
+                        $property_ids[] = get_the_ID();
+                endwhile;
+            endif;
+            Houzez_Query::loop_reset();
+
+            return $property_ids;
+        }
+
+        /**
          * Sets author properties into loop
          *
          * @access public
@@ -360,19 +409,36 @@ if(!class_exists('Houzez_Query')) {
                 'post_type' => 'property',
                 'posts_per_page' => -1,
                 'post_status' => 'publish',
-                'meta_query' => array(
+            );
+
+            $agents_array = array();
+            $agency_agents_ids = Houzez_Query::loop_agency_agents_ids($agency_id);
+
+
+            if( !empty($agency_agents_ids) ) {
+                $agents_array = array(
+                    'key' => 'fave_agents',
+                    'value' => $agency_agents_ids,
+                    'compare' => 'IN',
+                );
+            }
+
+            $agency_listing_args['meta_query'] = array(
+                'relation' => 'OR',
+                $agents_array,
+                array(
                     'relation' => 'AND',
                     array(
-                        'key' => 'fave_property_agency',
-                        'value' => $agency_id,
+                        'key'     => 'fave_property_agency',
+                        'value'   => $agency_id,
                         'compare' => '='
                     ),
                     array(
-                        'key' => 'fave_agent_display_option',
-                        'value' => 'agency_info',
+                        'key'     => 'fave_agent_display_option',
+                        'value'   => 'agency_info',
                         'compare' => '='
-                    ),
-                )
+                    )
+                ),
             );
 
             $qry = new WP_Query( $agency_listing_args );
@@ -510,46 +576,24 @@ if(!class_exists('Houzez_Query')) {
                 'posts_per_page' => -1,
                 'post_status' => 'publish',
                 'meta_query' => array(
+                    'relation' => 'AND',
                     array(
                         'key' => 'fave_property_agency',
                         'value' => $agency_id,
                         'compare' => '='
-                    )
+                    ),
+                    array(
+                        'key' => 'fave_agent_display_option',
+                        'value' => 'agency_info',
+                        'compare' => '='
+                    ),
                 )
             );
 
             $agency_qry = new WP_Query( $agency_listing_args );
-            return $agency_qry->post_count;
+            return $agency_qry->found_posts;
         }
 
-        /**
-         * Sets agent properties count into loop
-         *
-         * @access public
-         * @param null|int $post_id
-         * @return void
-         */
-        public static function agent_properties_count( $agent_id = null ) {
-            if ( null == $agent_id ) {
-                $agent_id = get_the_ID();
-            }
-
-            $args = array(
-                'post_type' => 'property',
-                'posts_per_page' => -1,
-                'post_status' => 'publish',
-                'meta_query' => array(
-                    array(
-                        'key' => 'fave_agents',
-                        'value' => $agent_id,
-                        'compare' => '='
-                    )
-                )
-            );
-
-            $qry = new WP_Query( $args );
-            return $qry->post_count;
-        }
 
         /**
          * Sets agent properties count into loop
@@ -572,6 +616,40 @@ if(!class_exists('Houzez_Query')) {
 
             $qry = new WP_Query( $args );
             return $qry->post_count;
+        }
+
+        /**
+         * Sets agent properties count into loop
+         *
+         * @access public
+         * @param null|int $post_id
+         * @return void
+         */
+        public static function agent_properties_count( $agent_id = null ) {
+            if ( null == $agent_id ) {
+                $agent_id = get_the_ID();
+            }
+
+            $args = array(
+                'post_type' => 'property',
+                'post_status' => 'publish',
+                'meta_query' => array(
+                    'relation' => 'AND',
+                    array(
+                        'key' => 'fave_agents',
+                        'value' => $agent_id,
+                        'compare' => '='
+                    ),
+                    array(
+                        'key' => 'fave_agent_display_option',
+                        'value' => 'agent_info',
+                        'compare' => '='
+                    )
+                )
+            );
+
+            $qry = new WP_Query( $args );
+            return $qry->found_posts;
         }
 
         /**
@@ -608,9 +686,15 @@ if(!class_exists('Houzez_Query')) {
                 'post_status' => 'publish',
                 'paged' => $paged,
                 'meta_query' => array(
+                    'relation' => 'AND',
                     array(
                         'key' => 'fave_agents',
                         'value' => $agent_id,
+                        'compare' => '='
+                    ),
+                    array(
+                        'key' => 'fave_agent_display_option',
+                        'value' => 'agent_info',
                         'compare' => '='
                     )
                 )

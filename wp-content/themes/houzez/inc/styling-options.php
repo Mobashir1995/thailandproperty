@@ -96,7 +96,6 @@ if(!function_exists('houzez_custom_styling')) {
             font-size: {$body_font_size};
             font-weight: {$body_font_weight};
             line-height: {$body_line_height};
-            text-align: left;
             text-transform: {$body_text_transform};
         }
         .main-nav,
@@ -225,13 +224,17 @@ if(!function_exists('houzez_custom_styling')) {
     /* ------------------------------------------------------------------------ */
     $body_text_color = houzez_option('body_text_color', '#222222');
     $body_bg_color = houzez_option('body_bg_color', '#f8f8f8');
+    $body_bg_color_v2 = houzez_option('body_bg_color_v2', '#ffffff');
 
     $houzez_body_colors = "
       body,
-      #main-wrap,
+      .main-wrap,
       .fw-property-documents-wrap h3 span, 
       .fw-property-details-wrap h3 span {
         background-color: {$body_bg_color}; 
+      }
+      .houzez-main-wrap-v2, .main-wrap.agent-detail-page-v2 {
+        background-color: {$body_bg_color_v2};
       }
 
        body,
@@ -336,12 +339,13 @@ if(!function_exists('houzez_custom_styling')) {
       .property-walkscore-wrap-v2 .score-details .houzez-icon,
       .login-register .btn-icon-login-register + .dropdown-menu a,
       .activitiy-item-close-button a:hover,
-      .property-section-wrap li a:hover {
+      .property-section-wrap li a:hover,
+      .agent-detail-page-v2 .agent-nav-wrap .nav-link.active {
         color: {$primary_color}; 
       }
       
       .agent-list-position a {
-        color: {$primary_color}!important; 
+        color: {$primary_color}; 
       }
 
       .control input:checked ~ .control__indicator,
@@ -395,7 +399,8 @@ if(!function_exists('houzez_custom_styling')) {
       .dashaboard-snake-nav .step-block.active,
       .fc-event,
       .fc-event-dot,
-      .property-schedule-tour-form-wrap .control input:checked ~ .control__indicator {
+      .property-schedule-tour-form-wrap .control input:checked ~ .control__indicator,
+      .agent-detail-page-v2 .agent-nav-wrap .nav-link.active {
         border-color: {$primary_color}; 
       }
 
@@ -1317,6 +1322,79 @@ if(!function_exists('houzez_custom_styling')) {
     }
     ";
 
+    /* Agent Detail
+    /* ------------------------------------------------------------------------ */
+    $aad_bg_color = houzez_option('aad_bg_color', '#0e4c7b');
+    $aad_text_color = houzez_option('aad_text_color', '#ffffff');
+    $aad_links_color = houzez_option('aad_links_color', '#00aeff');
+
+    $agent_agency_detail_colors = "
+      .agent-detail-page-v2 .agent-profile-wrap { background-color:{$aad_bg_color} }
+      .agent-detail-page-v2 .agent-list-position a, .agent-detail-page-v2 .agent-profile-header h1, .agent-detail-page-v2 .rating-score-text, .agent-detail-page-v2 .agent-profile-address address, .agent-detail-page-v2 .badge-success { color:{$aad_text_color} }
+
+      .agent-detail-page-v2 .all-reviews, .agent-detail-page-v2 .agent-profile-cta a { color:{$aad_links_color} }
+    ";
+
+
+    /* Widgets
+    /* ------------------------------------------------------------------------ */
+    $widgets_custom_css = '';
+    $widgets_prefix = '';
+    $widgets_custom_design = houzez_option('widgets_custom_design', 0);
+    $widgets_custom_design_apply = houzez_option('widgets_custom_design_apply', 1);
+    $widget_bg_color = houzez_option('widget_bg_color', '#ffffff');
+    $widget_border = houzez_option('widget_border');
+    $widget_border_radius = houzez_option('widget_border_radius');
+    $widget_padding = houzez_option('widget_padding');
+    $widget_border_color = isset( $widget_border['border-color'] ) ? $widget_border['border-color'] : '';
+    $widget_border_style = isset( $widget_border['border-style'] ) ? $widget_border['border-style'] : '';
+    $widget_border_top = isset( $widget_border['border-top'] ) ? $widget_border['border-top'] : '';
+    $widget_border_bottom = isset( $widget_border['border-bottom'] ) ? $widget_border['border-bottom'] : '';
+    $widget_border_left = isset( $widget_border['border-left'] ) ? $widget_border['border-left'] : '';
+    $widget_border_right = isset( $widget_border['border-right'] ) ? $widget_border['border-right'] : '';
+
+    if( $widget_border_top != "" ) {
+       $widget_border_top = 'border-top: '.$widget_border_top.' '.$widget_border_style.' '.$widget_border_color.'';
+    }
+
+    if( $widget_border_bottom != "" ) {
+       $widget_border_bottom = 'border-bottom: '.$widget_border_bottom.' '.$widget_border_style.' '.$widget_border_color.'';
+    }
+
+    if( $widget_border_left != "" ) {
+       $widget_border_left = 'border-left: '.$widget_border_left.' '.$widget_border_style.' '.$widget_border_color.'';
+    }
+
+    if( $widget_border_right != "" ) {
+       $widget_border_right = 'border-right: '.$widget_border_right.' '.$widget_border_style.' '.$widget_border_color.'';
+    }
+
+    if( $widget_border_radius != '' ) {
+        $widget_border_radius = 'border-radius: '.$widget_border_radius.'';
+    }
+
+    if( $widget_padding != '' ) {
+        $widget_padding = 'padding: '.$widget_padding.'';
+    }
+
+    if( $widgets_custom_design_apply ) {
+      $widgets_prefix = '.houzez-main-wrap-v2 ';
+    }
+
+    if( $widgets_custom_design ) {
+      $widgets_custom_css = "
+      {$widgets_prefix} .widget-wrap {
+        background-color: {$widget_bg_color};
+        {$widget_border_top};
+        {$widget_border_bottom};
+        {$widget_border_left};
+        {$widget_border_right};
+        {$widget_border_radius};
+        {$widget_padding};
+      }
+      ";
+    }
+
 
     /* footer
     /* ------------------------------------------------------------------------ */
@@ -1510,7 +1588,9 @@ if(!function_exists('houzez_custom_styling')) {
       $prop_detail_color.
       $topbar_styling.
       $energy_class_colors.
+      $agent_agency_detail_colors.
       $footer_styling.
+      $widgets_custom_css.
       $osm_cluster_css.
       $banners_style.
       $houzez_custom_css

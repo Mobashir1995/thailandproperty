@@ -79,14 +79,16 @@ Redux::setSection( $houzez_opt_name, array(
             'type'     => 'select',
             'required' => array( 'enable_paid_submission', '!=', 'no' ),
             'title'    => esc_html__('Currency', 'houzez'),
-            'subtitle' => '',
+            'subtitle' => esc_html__('Note: AED, BHD, KWD, SAR currencies not supported by PayPal.', 'houzez'),
             'desc'     => esc_html__('Select the currency to use for paid submissions', 'houzez'),
             'options'  => array(
                 'USD'  => 'USD',
                 'EUR'  => 'EUR',
+                'AED'  => 'AED', // PayPal not support AED
                 'AUD'  => 'AUD',
                 'ARS'  => 'ARS',
                 'AZN'  => 'AZN',
+                'BHD'  => 'BHD', // PayPal not support BHD, 3 digit
                 'BRL'  => 'BRL',
                 'BTD'  => 'BTD',
                 'CAD'  => 'CAD',
@@ -105,6 +107,7 @@ Redux::setSection( $houzez_opt_name, array(
                 'JPY'  => 'JPY',
                 'KOR'  => 'KOR',
                 'KSH'  => 'KSH',
+                'KWD'  => 'KWD', // PayPal not support KWD, 3 digit
                 'LKR'  => 'LKR',
                 'MYR'  => 'MYR',
                 'MXN'  => 'MXN',
@@ -119,6 +122,7 @@ Redux::setSection( $houzez_opt_name, array(
                 'GBP'  => 'GBP',
                 'RON'  => 'RON',
                 'RUB'  => 'RUB',
+                'SAR'  => 'SAR', // PayPal not support SAR
                 'SGD'  => 'SGD',
                 'SEK'  => 'SEK',
                 'TWD'  => 'TWD',

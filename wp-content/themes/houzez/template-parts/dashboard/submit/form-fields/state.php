@@ -11,7 +11,7 @@ if (houzez_edit_property()) {
 
 	<?php
 	if(houzez_option('location_dropdowns') == 'yes') { ?>
-		<select name="administrative_area_level_1" data-state="<?php echo esc_attr($state); ?>" data-target="houzezThirdList" <?php houzez_required_field_2('state'); ?> id="countyState" class="houzezSelectFilter houzezSecondList selectpicker form-control bs-select-hidden" data-size="5" data-none-results-text="<?php echo houzez_option('cl_no_results_matched', 'No results matched');?> {0}" data-live-search="true">
+		<select name="administrative_area_level_1" data-state="<?php echo urldecode($state); ?>" data-target="houzezThirdList" <?php houzez_required_field_2('state'); ?> id="countyState" class="houzezSelectFilter houzezSecondList selectpicker form-control bs-select-hidden" data-size="5" data-none-results-text="<?php echo houzez_option('cl_no_results_matched', 'No results matched');?> {0}" data-live-search="true">
             <?php
 	        if (houzez_edit_property()) {
 	            global $property_data;

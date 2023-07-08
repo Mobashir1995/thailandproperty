@@ -23,7 +23,9 @@ if(!function_exists('houzez_number_shorten')) {
 
 if(!function_exists('houzez_number_shorten_global')) {
     function houzez_number_shorten_global($number, $precision = 0, $divisors = null) {
-    $number = houzez_clean_price_20($number);
+        $number = houzez_clean_price_20($number);
+
+        $number = intval($number);
 
         if (!isset($divisors)) {
             $divisors = array(
@@ -53,6 +55,9 @@ if(!function_exists('houzez_number_shorten_global')) {
 if( ! function_exists( 'houzez_indian_number_shorten' ) ) {
     function houzez_indian_number_shorten($number, $precision = 0, $divisors = null) {
         $no = preg_replace('/[.,]/', '', $number);
+
+        $no = intval($no);
+
         if($no == 0) {
             return ' ';
         }else {
@@ -1002,7 +1007,8 @@ if( !function_exists( 'houzez_property_price_admin' ) ) {
                     echo '</b>';
                 }
             }
-
+        } else {
+            echo '-';
         }
     }
 }
@@ -1058,6 +1064,7 @@ if( !function_exists('houzez_adv_searches_min_price') ) {
         $searched_price = '';
 
         $minimum_price_theme_options = houzez_option('min_price');
+        $srh_any = houzez_option('srh_any');
 
         if( !empty($minimum_price_theme_options) ) {
             $minimum_prices_array = explode( ',', $minimum_price_theme_options );
@@ -1082,9 +1089,9 @@ if( !function_exists('houzez_adv_searches_min_price') ) {
         }
 
         if( $searched_price == 'any' )  {
-            echo '<option value="any" selected="selected">'.esc_html__( 'Any', 'houzez').'</option>';
+            echo '<option value="any" selected="selected">'.esc_attr($srh_any).'</option>';
         } else {
-            echo '<option value="any">'.esc_html__( 'Any', 'houzez').'</option>';
+            echo '<option value="any">'.esc_attr($srh_any).'</option>';
         }
 
         if( !empty( $prices_array ) ) {
@@ -1109,6 +1116,7 @@ if( !function_exists('houzez_adv_searches_min_price_rent_only') ) {
         $searched_price = '';
 
         $minimum_price_theme_options = houzez_option('min_price_rent');
+        $srh_any = houzez_option('srh_any');
 
         if( !empty($minimum_price_theme_options) ) {
             $minimum_prices_array = explode( ',', $minimum_price_theme_options );
@@ -1133,9 +1141,9 @@ if( !function_exists('houzez_adv_searches_min_price_rent_only') ) {
         }
 
         if( $searched_price == 'any' )  {
-            echo '<option value="any" selected="selected">'.esc_html__( 'Any', 'houzez').'</option>';
+            echo '<option value="any" selected="selected">'.esc_attr($srh_any).'</option>';
         } else {
-            echo '<option value="any">'.esc_html__( 'Any', 'houzez').'</option>';
+            echo '<option value="any">'.esc_attr($srh_any).'</option>';
         }
 
         if( !empty( $price_array ) ) {
@@ -1160,6 +1168,7 @@ if( !function_exists('houzez_adv_searches_max_price') ) {
         $searched_price = '';
 
         $maximum_price_theme_options = houzez_option('max_price');
+        $srh_any = houzez_option('srh_any');
 
         if( !empty($maximum_price_theme_options) ) {
             $maximum_price_array = explode( ',', $maximum_price_theme_options );
@@ -1184,9 +1193,9 @@ if( !function_exists('houzez_adv_searches_max_price') ) {
         }
 
         if( $searched_price == 'any' )  {
-            echo '<option value="any" selected="selected">'.esc_html__( 'Any', 'houzez').'</option>';
+            echo '<option value="any" selected="selected">'.esc_attr($srh_any).'</option>';
         } else {
-            echo '<option value="any">'.esc_html__( 'Any', 'houzez').'</option>';
+            echo '<option value="any">'.esc_attr($srh_any).'</option>';
         }
 
         if( !empty( $price_array ) ) {
@@ -1211,6 +1220,7 @@ if( !function_exists('houzez_adv_searches_max_price_rent_only') ) {
         $searched_price = '';
 
         $maximum_price_theme_options = houzez_option('max_price_rent');
+        $srh_any = houzez_option('srh_any');
 
         if( !empty($maximum_price_theme_options) ) {
             $maximum_price_array = explode( ',', $maximum_price_theme_options );
@@ -1235,9 +1245,9 @@ if( !function_exists('houzez_adv_searches_max_price_rent_only') ) {
         }
 
         if( $searched_price == 'any' )  {
-            echo '<option value="any" selected="selected">'.esc_html__( 'Any', 'houzez').'</option>';
+            echo '<option value="any" selected="selected">'.esc_attr($srh_any).'</option>';
         } else {
-            echo '<option value="any">'.esc_html__( 'Any', 'houzez').'</option>';
+            echo '<option value="any">'.esc_attr($srh_any).'</option>';
         }
 
         if( !empty( $price_array ) ) {

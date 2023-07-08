@@ -215,6 +215,14 @@ Redux::setSection( $houzez_opt_name, array(
                 'template/template-listing-list-v2-fullwidth.php' => 'Template listings list v2 full width',
                 'template/template-listing-list-v5.php' => 'Template listings list v5',
                 'template/template-listing-list-v5-fullwidth.php' => 'Template listings list v5 full width',
+
+                'template/template-listing-list-v7.php' => 'Template listing list v7',
+                'template/template-listing-list-v7-fullwidth.php' => 'Template listing list v7 full width',
+                'template/template-listing-grid-v7.php' => 'Template listing grid v7',
+                'template/template-listing-grid-v7-fullwidth-2cols.php' => 'Template listing grid v7 full width 2Cols',
+                'template/template-listing-grid-v7-fullwidth-3cols.php' => 'Template listing grid v7 full width 3Cols',
+                'template/template-listing-grid-v7-fullwidth-4cols.php' => 'Template listing grid v7 full width 4Cols',
+
                 'template/properties-parallax.php' => 'Template Listings Parallax',
                 'template/property-listings-map.php' => 'Property Listing Half Map',
                 'template/template-splash.php' => 'Splash Page Template',

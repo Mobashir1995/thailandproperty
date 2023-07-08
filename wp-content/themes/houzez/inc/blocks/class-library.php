@@ -117,6 +117,8 @@ class Houzez_Library
 			<# data.elements.forEach(function(item, i) { #>
 				
 				<div class="elementor-template-library-template elementor-template-library-template-remote elementor-template-library-template-{{{item.type === 'template' ? 'page' : 'block'}}}" data-slug="{{{item.slug}}}" data-tag="{{{item.category}}}" data-type="{{{item.type}}}">
+
+					<div class="elementor-template-library-template elementor-template-library-template-remote elementor-template-library-template-block" data-title="{{{item.image}}}" data-slug="{{{item.slug}}}" data-tag="{{{item.class}}}">
 					
 					<div class="elementor-template-library-template-body">
 						<# if (item.type === 'block') { #>

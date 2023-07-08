@@ -1,5 +1,5 @@
 <?php
-global $agent_total_listings, $agent_listing_ids;
+global $agent_listing_ids;
 
 $taxnonomies = $tax_chart_data = $taxs_list_data = $total_count = $stats_array = array();
 
@@ -16,9 +16,22 @@ foreach ($taxnonomies as $slug => $name) {
 	$count = houzez_realtor_stats('property_city', 'fave_agents', get_the_ID(), $slug);
 	if(!empty($count)) {
 		$total_count[] = $count;
-		$stats_array[$name] = ($count / $agent_total_listings) * 100;
 	}
 }
+
+/* Later coded */
+$total_listings = array_sum($total_count);
+
+$i = 0;
+foreach ($taxnonomies as $slug => $name) {
+
+	$count = $total_count[$i];
+	if(!empty($count)) {
+		$stats_array[$name] = ($count / $total_listings) * 100;
+	}
+	$i++;
+}
+/* Later coded end */
 
 arsort($stats_array);
 
@@ -32,10 +45,10 @@ $total_count = array_slice($total_count, 0, 3);
 $total_records = count($total_count);
 $total_count = array_sum($total_count);
 
-if(!empty($total_count) && $total_count <= $agent_total_listings ) {
-	$others = $agent_total_listings - $total_count;
+if(!empty($total_count) && $total_count <= $total_listings ) {
+	$others = $total_listings - $total_count;
 
-	$other_percent = ($others / $agent_total_listings) * 100;
+	$other_percent = ($others / $total_listings) * 100;
 
 	if(!empty($other_percent)) {
 		$tax_chart_data[] = $other_percent;

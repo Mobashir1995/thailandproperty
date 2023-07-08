@@ -344,7 +344,7 @@ Redux::setSection( $houzez_opt_name, array(
             'notice' => false,
             'style'  => 'info',
             'title'  => wp_kses(__( '<span class="font24">New Registered User</span>', 'houzez' ), $allowed_html_array),
-            'desc'   => esc_html__( '%user_login_register as username, %user_pass_register as user password, %user_email_register as new user email, %user_phone_register as phone number', 'houzez' )
+            'desc'   => esc_html__( '%user_login_register as username, %user_pass_register as user password, %user_email_register as new user email, %user_phone_register as phone number, %email_verification_link as email verification', 'houzez' )
         ),
 
         array(
@@ -395,6 +395,28 @@ E-mail: %user_email_register', 'houzez'),
                 'textarea_rows' => 10
             )
         ),
+
+        /*array(
+            'id'       => 'houzez_subject_user_register_verification',
+            'type'     => 'text',
+            'title'    => esc_html__('Subject for New User Verification', 'houzez'),
+            'subtitle' => esc_html__('Email subject for new user verification', 'houzez'),
+            'desc'     => '',
+            'default'  => esc_html__('Please verify your email on %website_name', 'houzez'),
+        ),
+        array(
+            'id'       => 'houzez_user_register_verification',
+            'type'     => 'editor',
+            'title'    => esc_html__('Content for New User Verification', 'houzez'),
+            'subtitle' => esc_html__('Email content for new user verification', 'houzez'),
+            'desc'     => '',
+            'default'  => esc_html__('Hi there,
+Welcome to %website_name! Click the following link to verify your email: %email_verification_link', 'houzez'),
+            'args' => array(
+                'teeny' => false,
+                'textarea_rows' => 10
+            )
+        ),*/
     )
 ));
 

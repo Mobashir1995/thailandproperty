@@ -11,7 +11,7 @@ if (houzez_edit_property()) {
 
 	<?php
 	if(houzez_option('location_dropdowns') == 'yes') { ?>
-		<select name="neighborhood" data-area="<?php echo esc_attr($area); ?>" data-size="5" id="neighborhood" <?php houzez_required_field_2('area'); ?> class=" houzezSelectFilter houzezFourthList selectpicker form-control bs-select-hidden" data-live-search="true" data-none-results-text="<?php echo houzez_option('cl_no_results_matched', 'No results matched');?> {0}">
+		<select name="neighborhood" data-area="<?php echo urldecode($area); ?>" data-size="5" id="neighborhood" <?php houzez_required_field_2('area'); ?> class=" houzezSelectFilter houzezFourthList selectpicker form-control bs-select-hidden" data-live-search="true" data-none-results-text="<?php echo houzez_option('cl_no_results_matched', 'No results matched');?> {0}">
             <?php
 	        if (houzez_edit_property()) {
 	            global $property_data;

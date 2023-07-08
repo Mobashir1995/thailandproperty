@@ -23,7 +23,8 @@ if( ( $property_live_status == 'on_hold' ) && ( $post->post_author != get_curren
 
 $is_sticky = '';
 $sticky_sidebar = houzez_option('sticky_sidebar');
-if( $sticky_sidebar['single_property'] != 0 ) { 
+
+if( isset( $sticky_sidebar['single_property'] ) && $sticky_sidebar['single_property'] != 0 ) { 
     $is_sticky = 'houzez_sticky'; 
 }
 
@@ -116,6 +117,9 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 
                 } elseif($top_area == 'v6') {
                     get_template_part('property-details/top-area-v6');
+
+                } elseif($top_area == 'v7') {
+                    get_template_part('property-details/top-area-v7');
 
                 }
                 
