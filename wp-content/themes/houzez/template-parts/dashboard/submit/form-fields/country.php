@@ -10,7 +10,7 @@ if (houzez_edit_property()) {
 	<label><?php echo houzez_option('cl_country', 'Country').houzez_required_field('country'); ?></label>
 	<?php
 	if(houzez_option('location_dropdowns') == 'yes') { ?>
-		<select name="country" id="country" data-country="<?php echo esc_attr($country); ?>" data-target="houzezSecondList" <?php houzez_required_field_2('country'); ?> class="houzezSelectFilter houzezFirstList selectpicker form-control bs-select-hidden" data-size="5" data-none-results-text="<?php echo houzez_option('cl_no_results_matched', 'No results matched');?> {0}" data-live-search="true">
+		<select name="country" id="country" data-country="<?php echo urldecode($country); ?>" data-target="houzezSecondList" <?php houzez_required_field_2('country'); ?> class="houzezSelectFilter houzezFirstList selectpicker form-control bs-select-hidden" data-size="5" data-none-results-text="<?php echo houzez_option('cl_no_results_matched', 'No results matched');?> {0}" data-live-search="true">
             <?php
 	        if (houzez_edit_property()) {
 	            

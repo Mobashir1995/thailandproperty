@@ -36,7 +36,7 @@ $tools_position = houzez_option('property_tools_mobile_pos', 'under_banner');
         </div><!-- mobile-property-title -->
     </div><!-- mobile-top-wrap -->
     <?php 
-    if($top_area == 'v6') {
+    if( $top_area == 'v6' || $top_area == 'v7' ) {
         get_template_part('property-details/overview');  
     }
     ?>

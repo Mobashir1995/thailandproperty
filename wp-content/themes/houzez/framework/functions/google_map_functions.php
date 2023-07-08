@@ -195,6 +195,8 @@ if( !function_exists( 'houzez_get_google_map_properties' ) ) {
 
             $wp_query_args['paged'] = $paged;
 
+            $wp_query_args['post_status'] = array( 'publish', 'houzez_sold' );
+
             $wp_query_args = houzez_prop_sort ( $wp_query_args );
             
 

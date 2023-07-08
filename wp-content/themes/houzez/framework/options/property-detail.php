@@ -38,6 +38,10 @@ Redux::setSection( $houzez_opt_name, array(
                     'alt' => '',
                     'img' => HOUZEZ_IMAGE . 'property/property-banner-style-6.jpg'
                 ),
+                'v7' => array(
+                    'alt' => '',
+                    'img' => HOUZEZ_IMAGE . 'property/property-banner-style-7.jpg'
+                ),
             ),
             'default'  => 'v1',
         ),

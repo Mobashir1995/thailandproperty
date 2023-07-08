@@ -620,6 +620,7 @@ jQuery( function($) {
                            houzez_init_remove_favorite(ajaxurl, userID);
                            houzez_listing_lightbox(ajaxurl, processing_text, houzez_rtl, userID);
                            houzez_grid_image_gallery();
+                           houzez_grid_call_to_action();
                            compare_for_ajax_map();
                            $('[data-toggle="tooltip"]').tooltip();
 
@@ -678,6 +679,7 @@ jQuery( function($) {
 
             var houzez_search_on_change = function(current_page){
                 reloadOSMMarkers();
+                $('.hz-halfmap-paged').val(current_page);
                 houzez_set_url(); 
                 houzez_half_map_listings(current_page);
             }
@@ -778,6 +780,7 @@ jQuery( function($) {
                 $('.houzez_ajax_pagination a').on('click', function(e){
                     e.preventDefault();
                     current_page = $(this).data('houzepagi');
+                    $('.hz-halfmap-paged').val(current_page);
                     houzez_search_on_change(current_page);
                 })
                 return false;

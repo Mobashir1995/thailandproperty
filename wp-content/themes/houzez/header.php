@@ -27,7 +27,7 @@ $houzez_local = houzez_get_localization();
 
 <?php } else { ?>
 
-	<main id="main-wrap" class="main-wrap <?php if(houzez_is_splash()) { echo 'splash-page-wrap'; }?>">
+	<main id="main-wrap" <?php houzez_main_wrap_class('main-wrap'); ?>>
 
 	<?php 
 	if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_location( 'header' ) ) {

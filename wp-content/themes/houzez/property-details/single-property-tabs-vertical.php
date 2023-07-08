@@ -177,7 +177,7 @@ $li_end = '</li>';
 <!--end tab-content-->
 
 <?php
-if($top_area != 'v6') {
+if( $top_area != 'v6' && $top_area != 'v7' ) {
     get_template_part('property-details/overview'); 
 }
 

@@ -8,7 +8,7 @@ if( !function_exists('houzez_get_localization')) {
 			/*------------------------------------------------------
 			* Theme
 			*------------------------------------------------------*/
-			'choose_currency' 			=> esc_html__( 'Choose Currency', 'houzez' ),
+			'choose_currency' 	=> esc_html__( 'Choose Currency', 'houzez' ),
 			'disable' 			=> esc_html__( 'Disable', 'houzez' ),
 			'enable' 			=> esc_html__( 'Enable', 'houzez' ),
 			'any' 				=> esc_html__( 'Any', 'houzez' ),
@@ -144,6 +144,8 @@ if( !function_exists('houzez_get_localization')) {
 
 
 		);
+	
+		$localization = apply_filters( 'houzez_localization',  $localization );
 
 		return $localization;
 	}

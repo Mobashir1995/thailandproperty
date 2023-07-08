@@ -6,7 +6,7 @@
  * @subpackage Houzez
  * @since Houzez 1.0
  */
-$allowed_html_array = array(
+$allowed_html_array = array( 
 	'a' => array(
 		'href' => array(),
 		'title' => array()

@@ -80,9 +80,13 @@ if( !function_exists('houzez_get_property_gallery') ) {
 
         if ( has_post_thumbnail() || $gallery_ids ) {
             $images = [];
+            $temp_array = [];
             
             if ( has_post_thumbnail() && houzez_option('featured_img_in_gallery', 0) != 1 ) {
-                $images[] = get_the_post_thumbnail_url($post, $size);
+                $thumb_id = get_post_thumbnail_id($post);
+                $temp_array['image'] = get_the_post_thumbnail_url($post, $size);
+                $temp_array['alt'] = get_post_meta( $thumb_id, '_wp_attachment_image_alt', true );
+                $images[] = $temp_array;
             }
 
             if ( empty($gallery_ids) ) {
@@ -90,8 +94,11 @@ if( !function_exists('houzez_get_property_gallery') ) {
             }
             foreach ( $gallery_ids as $id ) {
                 $img = wp_get_attachment_image_url($id, $size);
+                $alt_text = get_post_meta( $id, '_wp_attachment_image_alt', true );
                 if ( $img ) {
-                    $images[] = $img;
+                    $temp_array['image'] = $img;
+                    $temp_array['alt'] = $alt_text;
+                    $images[] = $temp_array;
                 }
             }
 
@@ -311,7 +318,7 @@ if( !function_exists('houzez_submit_listing') ) {
                 update_post_meta( $prop_id, 'fave_property_bedrooms', sanitize_text_field( $_POST['prop_beds'] ) );
             }
 
-            // Bedrooms
+            // Rooms
             if( isset( $_POST['prop_rooms'] ) ) {
                 update_post_meta( $prop_id, 'fave_property_rooms', sanitize_text_field( $_POST['prop_rooms'] ) );
             }
@@ -888,6 +895,11 @@ if( !function_exists('save_property_as_draft') ) {
                 update_post_meta( $prop_id, 'fave_property_bathrooms', sanitize_text_field( $_POST['prop_baths'] ) );
             }
 
+            // Rooms
+            if( isset( $_POST['prop_rooms'] ) ) {
+                update_post_meta( $prop_id, 'fave_property_rooms', sanitize_text_field( $_POST['prop_rooms'] ) );
+            }
+
             // Garages
             if( isset( $_POST['prop_garage'] ) ) {
                 update_post_meta( $prop_id, 'fave_property_garage', sanitize_text_field( $_POST['prop_garage'] ) );
@@ -1222,7 +1234,7 @@ if ( ! function_exists('houzez_custom_post_status') ) {
         register_post_status( 'expired', $args );
 
     }
-    add_action( 'init', 'houzez_custom_post_status', 1 );
+    add_action( 'admin_init', 'houzez_custom_post_status', 1 );
 }
 
 /*-----------------------------------------------------------------------------------*/
@@ -1242,7 +1254,7 @@ if ( ! function_exists('houzez_custom_post_disapproved') ) {
         register_post_status( 'disapproved', $args );
 
     }
-    add_action( 'init', 'houzez_custom_post_disapproved', 1 );
+    add_action( 'admin_init', 'houzez_custom_post_disapproved', 1 );
 }
 
 /*-----------------------------------------------------------------------------------*/
@@ -1262,7 +1274,7 @@ if ( ! function_exists('houzez_custom_post_status_on_hold') ) {
         register_post_status( 'on_hold', $args );
 
     }
-    add_action( 'init', 'houzez_custom_post_status_on_hold', 1 );
+    add_action( 'admin_init', 'houzez_custom_post_status_on_hold', 1 );
 }
 
 /*-----------------------------------------------------------------------------------*/
@@ -1286,7 +1298,7 @@ if ( ! function_exists('houzez_custom_post_status_sold') ) {
 
     }
 
-    add_action( 'init', 'houzez_custom_post_status_sold', 1 );
+    add_action( 'admin_init', 'houzez_custom_post_status_sold', 1 );
 }
 
 add_action( 'wp_ajax_houzez_save_search', 'houzez_save_search' );
@@ -3489,26 +3501,38 @@ if( !function_exists('houzez_get_property_agent') ) {
         $prop_agent_num = $agent_num_call = $prop_agent = $prop_agent_link = $property_agent = '';
         if( $prop_agent_display != '-1' && $agent_display_option == 'agent_info' ) {
 
-            $prop_agent_ids = get_post_meta( $prop_id, 'fave_agents' );
+            $agent_ids = get_post_meta( $prop_id, 'fave_agents' );
             // remove invalid ids
-            $prop_agent_ids = array_filter( $prop_agent_ids, function($hz){
+            $agent_ids = array_filter( $agent_ids, function($hz){
                 return ( $hz > 0 );
             });
 
-            $prop_agent_ids = array_unique( $prop_agent_ids );
+            $agent_ids = array_unique( $agent_ids );
 
-            if ( ! empty( $prop_agent_ids ) ) {
-                $agents_count = count( $prop_agent_ids );
+            if ( ! empty( $agent_ids ) ) {
+                $agents_count = count( $agent_ids );
                 $listing_agent = array();
-                foreach ( $prop_agent_ids as $agent ) {
+                foreach ( $agent_ids as $agent ) {
                     if ( 0 < intval( $agent ) ) {
+
+                        $agent_id = intval( $agent );
+                        $agent_mobile = get_post_meta( $agent_id, 'fave_agent_mobile', true );
+                        $agent_mobile_call = str_replace(array('(',')',' ','-'),'', $agent_mobile);
+                        $agent_email = get_post_meta( $agent_id, 'fave_agent_email', true );
+                        $agent_whatsapp = get_post_meta( $agent_id, 'fave_agent_whatsapp', true );
+                        $agent_whatsapp_call = str_replace(array('(',')',' ','-'),'', $agent_whatsapp);
+                        
                         $agent_args = array();
-                        $agent_args[ 'agent_id' ] = intval( $agent );
-                        $agent_args[ 'agent_name' ] = get_the_title( $agent_args[ 'agent_id' ] );
-                        $agent_args[ 'agent_mobile' ] = get_post_meta( $agent_args[ 'agent_id' ], 'fave_agent_mobile', true );
-                        $agent_num_call = str_replace(array('(',')',' ','-'),'', $agent_args[ 'agent_mobile' ]);
-                        $agent_args[ 'agent_email' ] = get_post_meta( $agent_args[ 'agent_id' ], 'fave_agent_email', true );
-                        $agent_args[ 'link' ] = get_permalink($agent_args[ 'agent_id' ]);
+                        $agent_args[ 'agent_name' ] = get_the_title( $agent_id );
+                        $agent_args[ 'agent_mobile' ] = $agent_mobile;
+                        $agent_args[ 'agent_mobile_call' ] = $agent_mobile_call;
+
+                        $agent_args[ 'agent_whatsapp' ] = $agent_whatsapp;
+                        $agent_args[ 'agent_whatsapp_call' ] = $agent_whatsapp_call;
+
+                        $agent_args[ 'agent_email' ] = $agent_email;
+                        $agent_args[ 'link' ] = get_permalink($agent_id);
+                        
                         $listing_agent[] = houzez_get_agent_info( $agent_args, 'for_grid_list' );
                     }
                 }
@@ -3516,7 +3540,7 @@ if( !function_exists('houzez_get_property_agent') ) {
 
         } elseif( $agent_display_option == 'agency_info' ) {
 
-            $prop_agency_ids = get_post_meta( $prop_id, 'fave_property_agency' );
+            $prop_agency_ids = get_post_meta( $prop_id, 'fave_property_agency' ); 
             // remove invalid ids
             $prop_agency_ids = array_filter( $prop_agency_ids, function($hz){
                 return ( $hz > 0 );
@@ -3529,13 +3553,27 @@ if( !function_exists('houzez_get_property_agent') ) {
                 $listing_agent = array();
                 foreach ( $prop_agency_ids as $agency ) {
                     if ( 0 < intval( $agency ) ) {
+
+                        $agency_id = intval( $agency );
+
+                        $agency_mobile = get_post_meta( $agency_id, 'fave_agency_mobile', true );
+                        $agency_mobile_call = str_replace(array('(',')',' ','-'),'', $agency_mobile);
+                        $agency_whatsapp = get_post_meta( $agency_id, 'fave_agency_whatsapp', true );
+                        $agency_whatsapp_call = str_replace(array('(',')',' ','-'),'', $agency_whatsapp);
+                        $agency_email = get_post_meta( $agency_id, 'fave_agency_email', true );
+
                         $agency_args = array();
-                        $agency_args[ 'agent_id' ] = intval( $agency );
-                        $agency_args[ 'agent_name' ] = get_the_title( $agency_args[ 'agent_id' ] );
-                        $agency_args[ 'agent_mobile' ] = get_post_meta( $agency_args[ 'agent_id' ], 'fave_agency_mobile', true );
-                        $agent_num_call = str_replace(array('(',')',' ','-'),'', $agency_args[ 'agent_mobile' ]);
-                        $agency_args[ 'agent_email' ] = get_post_meta( $agency_args[ 'agent_id' ], 'fave_agency_email', true );
-                        $agency_args[ 'link' ] = get_permalink($agency_args[ 'agent_id' ]);
+                        
+                        $agency_args[ 'agent_name' ] = get_the_title( $agency_id );
+                        $agency_args[ 'agent_mobile' ] = $agency_mobile;
+                        $agency_args[ 'agent_mobile_call' ] = $agency_mobile_call;
+
+                        $agency_args[ 'agent_whatsapp' ] = $agency_whatsapp;
+                        $agency_args[ 'agent_whatsapp_call' ] = $agency_whatsapp_call;
+
+                        $agency_args[ 'agent_email' ] = $agency_email;
+
+                        $agency_args[ 'link' ] = get_permalink($agency_id);
                         $listing_agent[] = houzez_get_agent_info( $agency_args, 'for_grid_list' );
                     }
                 }
@@ -3547,11 +3585,113 @@ if( !function_exists('houzez_get_property_agent') ) {
             $author_args = array();
             $author_args[ 'agent_name' ] = get_the_author();
             $author_args[ 'agent_mobile' ] = get_the_author_meta( 'fave_author_mobile' );
-            $agent_num_call = str_replace(array('(',')',' ','-'),'', get_the_author_meta( 'fave_author_mobile' ));
+            $author_args[ 'agent_mobile_call' ] = str_replace(array('(',')',' ','-'),'', get_the_author_meta( 'fave_author_mobile' ));
+
+            $author_args[ 'agent_whatsapp' ] = get_the_author_meta( 'fave_author_whatsapp' );
+            $author_args[ 'agent_whatsapp_call' ] = str_replace(array('(',')',' ','-'),'', get_the_author_meta( 'fave_author_whatsapp' ));
+
             $author_args[ 'agent_email' ] = get_the_author_meta( 'email' );
             $author_args[ 'link' ] = get_author_posts_url( get_the_author_meta( 'ID' ) );
 
             $listing_agent[] = houzez_get_agent_info( $author_args, 'for_grid_list' );
+        }
+        return $listing_agent;
+    }
+}
+
+if( !function_exists('houzez20_get_property_agent') ) {
+    function houzez20_get_property_agent($prop_id, $type = null) {
+
+        $agent_display_option = get_post_meta( $prop_id, 'fave_agent_display_option', true );
+        $prop_agent_display = get_post_meta( $prop_id, 'fave_agents', true );
+        $listing_agent = '';
+        $prop_agent_num = $agent_num_call = $prop_agent = $prop_agent_link = $property_agent = '';
+        if( $prop_agent_display != '-1' && $agent_display_option == 'agent_info' ) {
+
+            $agent_ids = get_post_meta( $prop_id, 'fave_agents' );
+
+            // remove invalid ids
+            $agent_ids = array_filter( $agent_ids, function($hz){
+                return ( $hz > 0 );
+            });
+
+            $reversed_agent_ids = array_reverse($agent_ids);
+            $agent_id = array_pop($reversed_agent_ids);
+
+            if( $agent_id != '' ) {
+
+                $agent_id = intval( $agent_id );
+                $agent_mobile = get_post_meta( $agent_id, 'fave_agent_mobile', true );
+                $agent_mobile_call = str_replace(array('(',')',' ','-'),'', $agent_mobile);
+                $agent_email = get_post_meta( $agent_id, 'fave_agent_email', true );
+                $agent_whatsapp = get_post_meta( $agent_id, 'fave_agent_whatsapp', true );
+                $agent_whatsapp_call = str_replace(array('(',')',' ','-'),'', $agent_whatsapp);
+                
+                $agent_args = array();
+                $agent_args[ 'agent_name' ] = get_the_title( $agent_id );
+                $agent_args[ 'agent_mobile' ] = $agent_mobile;
+                $agent_args[ 'agent_mobile_call' ] = $agent_mobile_call;
+
+                $agent_args[ 'agent_whatsapp' ] = $agent_whatsapp;
+                $agent_args[ 'agent_whatsapp_call' ] = $agent_whatsapp_call;
+
+                $agent_args[ 'agent_email' ] = $agent_email;
+                $agent_args[ 'link' ] = get_permalink($agent_id);
+                
+                $listing_agent = $agent_args;
+            }
+
+        } elseif( $agent_display_option == 'agency_info' ) {
+
+            $prop_agency_ids = get_post_meta( $prop_id, 'fave_property_agency' ); 
+            // remove invalid ids
+            $prop_agency_ids = array_filter( $prop_agency_ids, function($hz){
+                return ( $hz > 0 );
+            });
+
+            $reversed_agency_ids = array_reverse($prop_agency_ids);
+            $agency_id = array_pop($reversed_agency_ids);
+
+            if ( ! empty( $agency_id ) ) {
+                
+                $agency_id = intval( $agency_id );
+                $agency_mobile = get_post_meta( $agency_id, 'fave_agency_mobile', true );
+                $agency_mobile_call = str_replace(array('(',')',' ','-'),'', $agency_mobile);
+                $agency_whatsapp = get_post_meta( $agency_id, 'fave_agency_whatsapp', true );
+                $agency_whatsapp_call = str_replace(array('(',')',' ','-'),'', $agency_whatsapp);
+                $agency_email = get_post_meta( $agency_id, 'fave_agency_email', true );
+
+                $agency_args = array();
+                
+                $agency_args[ 'agent_name' ] = get_the_title( $agency_id );
+                $agency_args[ 'agent_mobile' ] = $agency_mobile;
+                $agency_args[ 'agent_mobile_call' ] = $agency_mobile_call;
+
+                $agency_args[ 'agent_whatsapp' ] = $agency_whatsapp;
+                $agency_args[ 'agent_whatsapp_call' ] = $agency_whatsapp_call;
+
+                $agency_args[ 'agent_email' ] = $agency_email;
+
+                $agency_args[ 'link' ] = get_permalink($agency_id);
+                $listing_agent = $agency_args;
+
+            }
+
+        } else {
+
+            $listing_agent = array();
+            $author_args = array();
+            $author_args[ 'agent_name' ] = get_the_author();
+            $author_args[ 'agent_mobile' ] = get_the_author_meta( 'fave_author_mobile' );
+            $author_args[ 'agent_mobile_call' ] = str_replace(array('(',')',' ','-'),'', get_the_author_meta( 'fave_author_mobile' ));
+
+            $author_args[ 'agent_whatsapp' ] = get_the_author_meta( 'fave_author_whatsapp' );
+            $author_args[ 'agent_whatsapp_call' ] = str_replace(array('(',')',' ','-'),'', get_the_author_meta( 'fave_author_whatsapp' ));
+
+            $author_args[ 'agent_email' ] = get_the_author_meta( 'email' );
+            $author_args[ 'link' ] = get_author_posts_url( get_the_author_meta( 'ID' ) );
+
+            $listing_agent = $author_args;
         }
         return $listing_agent;
     }
@@ -4243,6 +4383,7 @@ if(!function_exists('houzez20_property_contact_form')) {
 
                             $agent_args = array();
                             $agent_args[ 'agent_id' ] = $agent_id;
+                            $agent_args[ 'agent_type' ] = $agent_display;
                             $agent_args[ 'agent_skype' ] = get_post_meta( $agent_id, 'fave_agent_skype', true );
                             $agent_args[ 'agent_name' ] = $prop_agent;
                             $agent_args[ 'agent_mobile' ] = $prop_agent_mobile;
@@ -4308,6 +4449,7 @@ if(!function_exists('houzez20_property_contact_form')) {
 
                 $agent_args = array();
                 $agent_args[ 'agent_id' ] = $agent_id;
+                $agent_args[ 'agent_type' ] = $agent_display;
                 $agent_args[ 'agent_skype' ] = get_post_meta( $agent_id, 'fave_agency_skype', true );
                 $agent_args[ 'agent_name' ] = $prop_agent;
                 $agent_args[ 'agent_mobile' ] = $prop_agent_mobile;
@@ -4366,6 +4508,7 @@ if(!function_exists('houzez20_property_contact_form')) {
                 $agent_args = array();
                 $agent_id   = get_the_author_meta( 'ID' );
                 $agent_args[ 'agent_id' ] = get_the_author_meta( 'ID' );
+                $agent_args[ 'agent_type' ] = $agent_display;
                 $agent_args[ 'agent_skype' ] = get_the_author_meta( 'fave_author_skype' );
                 $agent_args[ 'agent_name' ] = $prop_agent;
                 $agent_args[ 'agent_mobile' ] = $prop_agent_mobile;
@@ -5851,7 +5994,7 @@ if ( ! function_exists( 'houzez_taxonomy_pagination' ) ) {
      * @param $query
      */
     function houzez_taxonomy_pagination( $query ) {
-        if ( is_tax( 'property_type' ) || is_tax( 'property_status' ) || is_tax( 'property_label' ) || is_tax( 'property_city' ) || is_tax( 'property_feature' ) || is_tax( 'property_country' ) || is_tax( 'property_state' ) || is_tax( 'property_area' ) ) {
+        if ( is_tax( 'property_type' ) || is_tax( 'property_status' ) || is_tax( 'property_label' ) || is_tax( 'property_city' ) || is_tax( 'property_feature' ) || is_tax( 'property_country' ) || is_tax( 'property_state' ) || is_tax( 'property_area' ) || is_post_type_archive('property') ) {
             if ( $query->is_main_query() ) {
                 $taxonomy_num_posts = houzez_option('taxonomy_num_posts');
                 $number_of_prop = intval($taxonomy_num_posts);
@@ -5970,6 +6113,8 @@ if( ! function_exists('houzez_products_tab') ) {
                     echo houzez_property_card_v5( $args );
                 } elseif( $grid_style == 'cards-v6' ) {
                     echo houzez_property_card_v6( $args );
+                } elseif( $grid_style == 'cards-v7' ) {
+                    echo houzez_property_card_v7( $args );
                 }
                 ?>
 
@@ -6043,7 +6188,7 @@ if( !function_exists('houzez_feature_output') ) {
         if($icon_type == 'custom') {
             $icon_url = wp_get_attachment_url( $img_icon );
             if(!empty($icon_url)) {
-                $feature_icon = '<img src="'.esc_url($icon_url).'" class="mr-2">';
+                $feature_icon = '<img src="'.esc_url($icon_url).'" class="hz-fte-img mr-2">';
             }
         } else {
             if(!empty($icon_class))

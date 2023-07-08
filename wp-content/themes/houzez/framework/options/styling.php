@@ -28,9 +28,18 @@ Redux::setSection( $houzez_opt_name, array(
         array(
             'id'       => 'body_bg_color',
             'type'     => 'color',
-            'title'    => esc_html__( 'Background Color', 'houzez' ),
+            'title'    => esc_html__( 'Body Background Color', 'houzez' ),
             'desc' => esc_html__('Select body background color', 'houzez'),
             'default'  => '#f8f8f8',
+            'transparent' => false,
+        ),
+
+        array(
+            'id'       => 'body_bg_color_v2',
+            'type'     => 'color',
+            'title'    => esc_html__( 'Body Background Color', 'houzez' ),
+            'desc' => esc_html__('Select body background color for listing grid v7, agents v2, agencies v2', 'houzez'),
+            'default'  => '#ffffff',
             'transparent' => false,
         ),
 
@@ -1292,6 +1301,110 @@ Redux::setSection( $houzez_opt_name, array(
                 'alpha' => '.75',
                 'rgba'  => ''
             )
+        ),
+    )
+));
+
+/* Widgets
+----------------------------------------------------------------*/
+Redux::setSection( $houzez_opt_name, array(
+    'title'  => esc_html__( 'Agent & Agency Detail', 'houzez' ),
+    'id'     => 'styling-single-agent-agency',
+    'desc'   => '',
+    'subsection' => true,
+    'fields' => array(
+        array(
+            'id'       => 'aad_bg_color',
+            'type'     => 'color',
+            'title'    => esc_html__( 'Background Color', 'houzez' ),
+            'desc'     => '',
+            'subtitle' => '',
+            'default'  => '#0e4c7b',
+        ),
+        array(
+            'id'       => 'aad_text_color',
+            'type'     => 'color',
+            'title'    => esc_html__( 'Text Color', 'houzez' ),
+            'desc'     => '',
+            'subtitle' => '',
+            'default'  => '#ffffff',
+        ),
+        array(
+            'id'       => 'aad_links_color',
+            'type'     => 'color',
+            'title'    => esc_html__( 'Links Color', 'houzez' ),
+            'desc'     => '',
+            'subtitle' => '',
+            'default'  => '#00aeff',
+        ),
+    )
+));
+
+/* Widgets
+----------------------------------------------------------------*/
+Redux::setSection( $houzez_opt_name, array(
+    'title'  => esc_html__( 'Widgets', 'houzez' ),
+    'id'     => 'styling-hz-widgets',
+    'desc'   => '',
+    'subsection' => true,
+    'fields' => array(
+        array(
+            'id'       => 'widgets_custom_design',
+            'type'     => 'switch',
+            'title'    => esc_html__( 'Widgets Custom Design', 'houzez' ),
+            'desc'     => esc_html__( 'Enable or disable widgets custom design', 'houzez' ),
+            'subtitle' => '',
+            'default'  => 0,
+            'on'       => 'Enabled',
+            'off'      => 'Disabled',
+        ),
+        array(
+            'id'       => 'widgets_custom_design_apply',
+            'type'     => 'switch',
+            'title'    => esc_html__( 'Where to Apply Custom Design?', 'houzez' ),
+            'desc'     => '',
+            'subtitle' => '',
+            'default'  => 1,
+            'on'       => 'Only Listings Template v7 & Agents, Agencies v2',
+            'off'      => 'Everywhere',
+            'required' => array('widgets_custom_design', '=', '1'),
+        ),
+        array(
+            'id'       => 'widget_bg_color',
+            'type'     => 'color',
+            'title'    => esc_html__( 'Background Color', 'houzez' ),
+            'subtitle' => '',
+            'default'  => '#ffffff',
+            'transparent' => true,
+            'required' => array('widgets_custom_design', '=', '1'),
+        ),
+        array(
+            'id'       => 'widget_border',
+            'type'     => 'border',
+            'title'    => esc_html__( 'Border', 'houzez' ),
+            'subtitle' => '',
+            'default'  => array(
+                'border-color' => '#ffffff', 
+                'border-style' => 'solid',
+            ),
+            'required' => array('widgets_custom_design', '=', '1'),
+        ),
+        array(
+            'id'       => 'widget_border_radius',
+            'type'     => 'text',
+            'title'    => esc_html__( 'Border Radius', 'houzez' ),
+            'subtitle' => esc_html__( 'Example: 4px', 'houzez' ),
+            'default'  => '4px',
+            'required' => array('widgets_custom_design', '=', '1'),
+        ),
+
+        array(
+            'id'       => 'widget_padding',
+            'type'     => 'text',
+            'title'    => esc_html__( 'Padding', 'houzez' ),
+            'subtitle' => esc_html__( 'Example: 30px', 'houzez' ),
+            'default'  => '30px',
+            'required' => array('widgets_custom_design', '=', '1'),
         ),
     )
 ));

@@ -9,7 +9,7 @@ if ($layout): foreach ($layout as $key=>$value) {
     switch($key) {
 
         case 'overview':
-            if($top_area != 'v6') {
+            if( $top_area != 'v6' && $top_area != 'v7' ) {
 			    get_template_part('property-details/overview');
 			}
             break;

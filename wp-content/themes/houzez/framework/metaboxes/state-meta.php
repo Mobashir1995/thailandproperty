@@ -43,7 +43,7 @@ if ( !function_exists( 'houzez_property_state_edit_meta_fields' ) ) :
         if(is_object ($term)) {
             $term_id      =  $term->term_id;
             $term_meta    =  get_option( "_houzez_property_state_$term_id" );
-            $parent_country  =  $term_meta['parent_country'] ? $term_meta['parent_country'] : '';
+            $parent_country  =  isset($term_meta['parent_country']) ? $term_meta['parent_country'] : '';
         }
         ?>
 

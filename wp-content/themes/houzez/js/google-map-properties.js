@@ -586,6 +586,7 @@ jQuery( function($) {
                            houzez_init_remove_favorite(ajaxurl, userID);
                            houzez_listing_lightbox(ajaxurl, processing_text, houzez_rtl, userID);
                            houzez_grid_image_gallery();
+                           houzez_grid_call_to_action();
                            compare_for_ajax_map();
 
                            if( !houzez_is_mobile ) {
@@ -616,7 +617,7 @@ jQuery( function($) {
                 window.history.pushState({houzezTheme: true}, '', pageUrl);
             }
 
-            var houzez_set_url = () => { 
+            var houzez_set_url = () => {
 
                 var $this = $('form.houzez-search-filters-js');
                 var url = $this.attr('action');
@@ -633,6 +634,7 @@ jQuery( function($) {
 
                 }).serialize();
 
+
                 if( url == undefined ) {
                     url = '';
                 } else if ( url.indexOf('?') != -1 ) {
@@ -646,6 +648,7 @@ jQuery( function($) {
 
             var houzez_search_on_change = function(current_page){
                 clearClusterer();
+                $('.hz-halfmap-paged').val(current_page);
                 houzez_set_url(); 
                 houzez_half_map_listings(current_page);
             }

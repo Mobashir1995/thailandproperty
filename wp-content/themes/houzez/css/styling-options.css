@@ -313,7 +313,7 @@ a:focus,
 /* body
 /* ------------------------------------------------------------------------ */
 body,
-#main-wrap {
+.main-wrap {
   background-color: #f8f8f8; }
 
 body,
@@ -758,7 +758,7 @@ body {
   font-size: 15px;
   line-height: 25px;
   font-weight: 300;
-  text-align: left;
+/*  text-align: left;*/
   text-transform: none; }
 
 /* buttons
@@ -792,7 +792,7 @@ strong, b, label {
   font-family: "Roboto", sans-serif;
   font-size: 14px;
   font-weight: 500;
-  text-align: left;
+/*  text-align: left;*/
   text-transform: none; }
 
 /* typography - headings
