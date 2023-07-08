@@ -887,6 +887,8 @@
 			<key name="houzez_new_user_register" />
 			<key name="houzez_subject_admin_new_user_register" />
 			<key name="houzez_admin_new_user_register" />
+			<key name="houzez_subject_user_register_verification" />
+			<key name="houzez_user_register_verification" />
 			<key name="houzez_subject_new_wire_transfer" />
 			<key name="houzez_new_wire_transfer" />
 			<key name="houzez_subject_admin_new_wire_transfer" />

@@ -8,10 +8,6 @@ if( !is_404() && !is_search() ) {
 }
 $search_sticky = houzez_option('mobile-search-sticky');
 $sticky_data = $search_sticky;
-
-if( ( !houzez_option('single_prop_search') && is_singular('property')) || (!houzez_option('single_agent_search') && is_singular('houzez_agent')) || (!houzez_option('single_agent_search') && is_singular('houzez_agency')) || ( !houzez_option('is_tax_page', 1) && is_tax() ) || ( !houzez_option('blog_page_search') && is_singular('post') ) || ( !houzez_option('blog_page_search') && is_home() ) ) {
-	return;
-}
 ?>
 <section class="advanced-search advanced-search-nav mobile-search-nav" data-sticky='<?php echo esc_attr( $sticky_data ); ?>'>
 	<div class="container">

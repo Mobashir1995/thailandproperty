@@ -14,7 +14,7 @@ if( $prop_room != '' ) {
 			if(!empty($cus_icon['url'])) {
 
 				$alt = isset($cus_icon['title']) ? $cus_icon['title'] : '';
-				$output .= '<img class="img-fluid mr-1" src="'.esc_url($cus_icon['url']).'" width="16" height="16" alt="'.esc_attr($cus_icon['title']).'">';
+				$output .= '<img class="img-fluid mr-1" src="'.esc_url($cus_icon['url']).'" width="16" height="16" alt="'.esc_attr($alt).'">';
 			}
 		} else {
 			$output .= '<i class="houzez-icon real-estate-dimensions-block mr-1"></i>';

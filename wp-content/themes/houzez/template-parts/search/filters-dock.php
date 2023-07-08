@@ -32,7 +32,8 @@ if( houzez_option('dock_price_range') ) {
 if(wp_is_mobile()) { 
 	$advanced_fields = array_slice($layout, 1);
 } else {
-	$advanced_fields = array_slice($layout, houzez_option('dock_search_top_row_fields'));
+	$num_fields = houzez_option('dock_search_top_row_fields');
+	$advanced_fields = array_slice($layout, intval($num_fields) );
 }
 
 ?>

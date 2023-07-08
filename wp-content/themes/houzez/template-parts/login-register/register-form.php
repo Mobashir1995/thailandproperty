@@ -71,22 +71,22 @@ $show_hide_roles = houzez_option('show_hide_roles');
     <select required="required" name="role" class="selectpicker form-control bs-select-hidden" data-live-search="false" data-live-search-style="begins">
         <option value=""> <?php esc_html_e('Select your account type', 'houzez'); ?> </option>
         <?php
-        if( $show_hide_roles['agent'] != 1 ) {
+        if( isset($show_hide_roles['agent']) && $show_hide_roles['agent'] != 1 ) {
             echo '<option value="houzez_agent"> '.houzez_option('agent_role').' </option>';
         }
-        if( $show_hide_roles['agency'] != 1 ) {
+        if( isset($show_hide_roles['agency']) && $show_hide_roles['agency'] != 1 ) {
             echo '<option value="houzez_agency"> ' . houzez_option('agency_role') . ' </option>';
         }
-        if( $show_hide_roles['owner'] != 1 ) {
+        if( isset($show_hide_roles['owner']) && $show_hide_roles['owner'] != 1 ) {
             echo '<option value="houzez_owner"> ' . houzez_option('owner_role') . '  </option>';
         }
-        if( $show_hide_roles['buyer'] != 1 ) {
+        if( isset($show_hide_roles['buyer']) && $show_hide_roles['buyer'] != 1 ) {
             echo '<option value="houzez_buyer"> ' . houzez_option('buyer_role') . '  </option>';
         }
-        if( $show_hide_roles['seller'] != 1 ) {
+        if( isset($show_hide_roles['seller']) && $show_hide_roles['seller'] != 1 ) {
             echo '<option value="houzez_seller"> ' . houzez_option('seller_role') . '  </option>';
         }
-        if( $show_hide_roles['manager'] != 1 ) {
+        if( isset($show_hide_roles['manager']) && $show_hide_roles['manager'] != 1 ) {
             echo '<option value="houzez_manager"> ' . houzez_option('manager_role') . ' </option>';
         }
         ?>
