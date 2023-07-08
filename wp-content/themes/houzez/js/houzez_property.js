@@ -854,19 +854,25 @@ jQuery(document).ready( function($) {
             });
 
             // Submit button click
-            btnsubmit.click(function(){
+            btnsubmit.click(function(){ 
 
-                if($(formStepGal).is(':visible')){
-                    if(!$(".property-thumb").length > 0){
+                if($(formStepGal).is(':visible')) { 
+                    if(!$(".property-thumb").length > 0) { 
                         $('#houzez_gallery_dragDrop').addClass('is-invalid');
                         errorBlockGal.show();
-                        return
-                    }else{
+
+                        $('html, body').animate({
+                            scrollTop: $(".form-step-gal").offset().top
+                        }, 'slow');
+                        
+                        return false;
+                    }else{ 
                         $('#houzez_gallery_dragDrop').removeClass('is-invalid');
                         errorBlockGal.hide();
                     }
                 }
-                if(form.valid()){ 
+
+                if(form.valid()) { 
                     errorBlock.hide();
                 }else{ 
                     errorBlock.show();
@@ -1198,38 +1204,157 @@ jQuery(document).ready( function($) {
         }
         propertyAttachmentEvents();
 
-        /* ------------------------------------------------------------------------ */
-        /*  Property Thumbnails actions ( make features & delete )
-         /* ------------------------------------------------------------------------ */
-        var propertyThumbnailEvents = function() {
+        
+        // Property Gallery Images function
+        var property_gallery_images = function() {
+
+            // Make the property gallery container sortable
+            $( "#houzez_property_gallery_container" ).sortable({
+                placeholder: "sortable-placeholder", // class for the placeholder element
+                revert      : 100, // animation duration when an item is dropped in an invalid position
+                cursor      : 'move' // cursor style when sorting
+            });
+
+
+            // Initialize plupload for uploading gallery images
+            var galleryUploader = new plupload.Uploader({
+                browse_button: 'select_gallery_images', // ID of the button to open the file picker dialog
+                file_data_name: 'property_upload_file', // name of the file input field
+                container: 'houzez_gallery_dragDrop', // ID of the container element to add drag-and-drop functionality
+                drop_element: 'houzez_gallery_dragDrop', // ID of the element to add drop-area functionality
+                url: ajax_url + "?action=houzez_property_img_upload&verify_nonce=" + verify_nonce, // URL to handle the image upload
+                filters: {
+                    mime_types : [
+                        { title : verify_file_type, extensions : "jpg,jpeg,gif,png,webp" } // allowed file types
+                    ],
+                    max_file_size: image_max_file_size, // maximum file size
+                    prevent_duplicates: false // allow or disallow duplicate files
+                }
+            });
+
+            // Initialize the plupload
+            galleryUploader.init();
+
+            // When files are added to the file queue
+            galleryUploader.bind('FilesAdded', function(up, files) {
+                var houzez_thumbs = "";
+                var maxfiles = max_prop_images; // maximum number of files allowed
+                var totalFiles  = $( '.property-thumb' ).length; // current number of files in the gallery
+
+                // Check if the total number of files exceeds the maximum allowed
+                if ( totalFiles >= maxfiles ) {
+                    $( '.max-limit-error' ).show(); // show error message
+                    up.splice(); // remove the excess files from the file queue
+                    return false;
+
+                } else {
+
+                    var uploads             = files.slice( 0, ( maxfiles - totalFiles ) );
+                    var thumbnailsContainer = document.getElementById( 'houzez_property_gallery_container' );
+
+                    // Add a thumbnail of the file to the gallery
+                    plupload.each( uploads, function ( file ) {
+                        thumbnailsContainer.innerHTML += '<div id="thumb-holder-' + file.id + '" class="col-md-2 col-sm-4 col-6 property-thumb houzez-during-upload">' + '' + '</div>';
+                    } );
+
+                    up.refresh();
+                    galleryUploader.start();
+                }
+
+                // Update the number of uploaded files
+                $( '.upload-image-counter .uploaded' ).text( $( '.property-thumb' ).length );
+            });
+
+            // Handle the upload progress
+            galleryUploader.bind('UploadProgress', function(up, file) {
+
+                var holder     = document.getElementById( "thumb-holder-" + file.id ),
+                    imageThumb = $( '.property-thumb' ),
+                    height     = 150;
+
+                if( holder ) {
+
+                    if( imageThumb.length ) {
+                        height = imageThumb.first().height();
+                    }
+                }
+
+                // Update the progress bar for the current file
+                holder.innerHTML = '<div class="gallery-thumb-inner upload-progress" style="height:' + height + 'px;"><span class="progress-bar"></span><span class="progress" style="width:' + file.percent + '%;"></span><span class="progress-text">' + file.percent + '%</span></div>';
+                return false;
+            });
+
+            // Handle any errors that occur during the upload
+            galleryUploader.bind('Error', function( up, err ) {
+                document.getElementById('houzez_errors').innerHTML += "<br/>" + "Error #" + err.code + ": " + err.message;
+            });
+
+            // When a file is uploaded successfully
+            galleryUploader.bind('FileUploaded', function ( up, file, ajax_response ) {
+                var response = $.parseJSON( ajax_response.response );
+                var thumbHolder   = document.getElementById( "thumb-holder-" + file.id );
+
+                if ( response.success ) {
+
+                    document.getElementById( 'houzez_errors' ).innerHTML = ""; // Clear any previous error messages
+
+                    if( thumbHolder ) {
+
+                        // Add the uploaded image to the gallery and add buttons for setting it as featured and deleting it
+                        var gallery_thumbnail = '<img class="img-fluid" src="' + response.url + '" alt="" />' +
+                        '<div class="upload-gallery-thumb-buttons">'+
+                        '<button class="icon icon-fav icon-featured" data-property-id="'+ 0 +'" data-attachment-id="' + response.attachment_id + '"><i class="houzez-icon icon-rating-star full-star"></i></button>'+
+                        '<button class="icon icon-delete" data-property-id="'+ 0 +'" data-attachment-id="' + response.attachment_id + '"><span class="btn-loader houzez-loader-js"></span><i class="houzez-icon icon-remove-circle"></i></button>'+
+                        '</div>'+
+                        '<input type="hidden" class="propperty-image-id" name="propperty_image_ids[]" value="' + response.attachment_id + '"/>';
+
+                        thumbHolder.innerHTML = gallery_thumbnail;
+                    }
+
+                } else {
+
+                    if ( thumbHolder ) {
+                        thumbHolder.remove();
+                    }
+                    document.getElementById( 'houzez_errors' ).innerHTML = response.reason;
+                }
+            });
+            
 
             // Set Featured Image
-            $('.icon-featured').click(function(e){
-                e.preventDefault();
+            $( document ).on( 'click', '.icon-featured', function ( e ) {
+                e.preventDefault(); // Prevent the default behavior of the event
 
+                // Get a reference to the clicked element and the attachment ID
                 var $this = jQuery(this);
                 var thumb_id = $this.data('attachment-id');
                 
-
+                // Remove any existing featured image ID inputs and "text-success" class from other icons
                 $('.property-thumb .featured_image_id').remove();
                 $('.property-thumb .icon-featured').removeClass('text-success');
 
+                // Add a new hidden input with the new featured image ID and add the "text-success" class to the clicked icon
                 $this.closest('.property-thumb').append('<input type="hidden" class="featured_image_id" name="featured_image_id" value="'+thumb_id+'">');
                 $this.addClass('text-success');
+
             });
 
-            //Remove Image
-            $('.icon-delete').click(function(e){
-                e.preventDefault();
 
+            //Remove Image
+            $( document ).on( 'click', '.icon-delete', function ( e ) {
+                e.preventDefault(); // Prevent the default behavior of the event
+
+                // Get a reference to the clicked element and the attachment ID
                 var $this = $(this);
-                var thumbnail = $this.closest('.property-thumb');
+                var galleryThumbnail = $this.closest('.property-thumb');
                 var loader = $this.siblings('.icon-loader');
                 var prop_id = $this.data('property-id');
                 var thumb_id = $this.data('attachment-id');
 
+                // Show the loader
                 loader.show();
 
+                // Make an AJAX request to delete the image from the server
                 var ajax_request = $.ajax({
                     type: 'post',
                     url: ajax_url,
@@ -1245,111 +1370,33 @@ jQuery(document).ready( function($) {
                     },
                 });
 
+                // Handle the AJAX response
                 ajax_request.done(function( response ) {
                     if ( response.remove_attachment ) {
-                        thumbnail.remove();
-                    } else {
 
+                        // Remove the image from the gallery and update the image counter
+                        galleryUploader.removeFile( galleryThumbnail );
+                        galleryThumbnail.remove();
+
+                        var galleryItems = $( '.property-thumb' ).length;
+                        $( '.upload-image-counter .uploaded' ).text( galleryItems );
+                        $( '.max-limit-error' ).hide();
+
+                    } else {
+                        // Handle an error
+                        document.getElementById( 'houzez_errors' ).innerHTML += "Error : Failed to remove attachment" + "<br/>";
                     }
                 });
 
+                // Handle any AJAX errors
                 ajax_request.fail(function( jqXHR, textStatus ) {
                     alert( "Request failed: " + textStatus );
                 });
 
-            });
+                // Remove the image from the gallery uploader
+                galleryUploader.splice();
 
-        }
-
-        propertyThumbnailEvents();
-
-        // Property Gallery images
-        var property_gallery_images = function() {
-
-            $( "#houzez_property_gallery_container" ).sortable({
-                placeholder: "sortable-placeholder"
-            });
-
-            var plup_uploader = new plupload.Uploader({
-                browse_button: 'select_gallery_images',
-                file_data_name: 'property_upload_file',
-                container: 'houzez_gallery_dragDrop',
-                drop_element: 'houzez_gallery_dragDrop',
-                url: ajax_url + "?action=houzez_property_img_upload&verify_nonce=" + verify_nonce,
-                filters: {
-                    mime_types : [
-                        { title : verify_file_type, extensions : "jpg,jpeg,gif,png,webp" }
-                    ],
-                    max_file_size: image_max_file_size,
-                    prevent_duplicates: false
-                }
-            });
-            plup_uploader.init();
-
-            plup_uploader.bind('FilesAdded', function(up, files) {
-                var houzez_thumbs = "";
-                var maxfiles = max_prop_images;
-
-                // get amount of files already added to the queue
-                // + ignoring the inital text, saying to drop files there which is a li also
-                var cur_files = $("#houzez_property_gallery_container .property-thumb").not(".houzez-during-upload").length;
-
-                var uploaded_files = $("#houzez_property_gallery_container .houzez-during-upload").length;
-
-                // previous and currently added files sum up to files_total
-                var files_total = up.files.length + cur_files;
-
-                /*plupload.each(files, function(file) {
-                    if ( files_total > maxfiles ) {
-                      alert('You are allowed to add only ' + maxfiles + ' files.');
-                      up.removeFile(file);
-                      return;
-                    }
-                });*/
-
-                if( files_total > maxfiles ) {
-                    up.splice(maxfiles);
-                    alert('no more than '+maxfiles + ' file(s)');
-                    return;
-                }
-                
-                plupload.each(files, function(file) {
-                    houzez_thumbs += '<div id="thumb-holder-' + file.id + '" class="col-md-2 col-sm-4 col-6 property-thumb houzez-during-upload">' + '' + '</div>';
-                });
-                document.getElementById('houzez_property_gallery_container').innerHTML += houzez_thumbs;
-                up.refresh();
-                plup_uploader.start();
-            });
-
-
-            plup_uploader.bind('UploadProgress', function(up, file) {
-                document.getElementById( "thumb-holder-" + file.id ).innerHTML = '<span>' + file.percent + "%</span>";
-            });
-
-            plup_uploader.bind('Error', function( up, err ) {
-                document.getElementById('houzez_errors').innerHTML += "<br/>" + "Error #" + err.code + ": " + err.message;
-            });
-
-            plup_uploader.bind('FileUploaded', function ( up, file, ajax_response ) {
-                var response = $.parseJSON( ajax_response.response );
-
-                if ( response.success ) {
-
-                    var gallery_thumbnail = '<img class="img-fluid" src="' + response.url + '" alt="" />' +
-                        '<div class="upload-gallery-thumb-buttons">'+
-                        '<button class="icon icon-fav icon-featured" data-property-id="'+ 0 +'" data-attachment-id="' + response.attachment_id + '"><i class="houzez-icon icon-rating-star full-star"></i></button>'+
-                        '<button class="icon icon-delete" data-property-id="'+ 0 +'" data-attachment-id="' + response.attachment_id + '"><span class="btn-loader houzez-loader-js"></span><i class="houzez-icon icon-remove-circle"></i></button>'+
-                        '</div>'+
-                        '<input type="hidden" class="propperty-image-id" name="propperty_image_ids[]" value="' + response.attachment_id + '"/>';
-
-                    document.getElementById( "thumb-holder-" + file.id ).innerHTML = gallery_thumbnail;
-
-                    propertyThumbnailEvents();
-
-                } else {
-                    console.log ( response );
-                }
-            });
+            }); // End remove gallery image
 
         }
         property_gallery_images();

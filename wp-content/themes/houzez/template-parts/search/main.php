@@ -36,17 +36,11 @@ if(isset($_GET['search_style']) && !empty($_GET['search_style'])) {
     $search_style = $_GET['search_style'];
 }
 
-if( ( !houzez_option('single_prop_search') && is_singular('property')) || (!houzez_option('single_agent_search') && is_singular('houzez_agent')) || (!houzez_option('single_agent_search') && is_singular('houzez_agency')) || ( !houzez_option('is_tax_page', 1) && is_tax() ) || ( !houzez_option('blog_page_search') && is_singular('post') ) || ( !houzez_option('blog_page_search') && is_home() ) ) {
-	return;
-}
 
-if( !wp_is_mobile() ) {
-	
-    if($search_style == 'style_1') {
-        get_template_part('template-parts/search/search-v1'); 
-    } elseif($search_style == 'style_2') {
-        get_template_part('template-parts/search/search-v2'); 
-    } elseif($search_style == 'style_3') {
-        get_template_part('template-parts/search/search-v3'); 
-    }
+if($search_style == 'style_1') {
+    get_template_part('template-parts/search/search-v1'); 
+} elseif($search_style == 'style_2') {
+    get_template_part('template-parts/search/search-v2'); 
+} elseif($search_style == 'style_3') {
+    get_template_part('template-parts/search/search-v3'); 
 }

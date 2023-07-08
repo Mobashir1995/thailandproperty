@@ -149,13 +149,13 @@
 
 			// Filter by tag
 			$('#houzez-library-modal #elementor-template-library-filter-subtype').on('change', function () {
-				var tag = $(this).val();
+				var val = $(this).val();
 
-				$('#houzez-library-modal').find('.elementor-template-library-template').each(function () {
+				$('#houzez-library-modal').find('.elementor-template-library-template-block').each(function () {
 					var $this = $(this);
+					var slug = $this.data('slug').toLowerCase();
 
-					const itemTags = $this.data('tag').toLowerCase();
-					if ((itemTags.includes(tag) || tag === 'all') && itemTags.includes('block')) {
+					if ( slug.indexOf(val) > -1 || val == 'all') {
 						$this.show();
 					} else {
 						$this.hide();

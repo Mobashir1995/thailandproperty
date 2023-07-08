@@ -18,6 +18,9 @@ $taxonomy_layout = houzez_option('taxonomy_layout');
 $have_switcher = true;
 
 $wrap_class = $item_layout = $view_class = $cols_in_row = '';
+
+$card_deck = 'card-deck';
+
 if($listing_view == 'list-view-v1') {
     $wrap_class = 'listing-v1';
     $item_layout = 'v1';
@@ -65,6 +68,19 @@ if($listing_view == 'list-view-v1') {
     $item_layout = 'v6';
     $view_class = 'grid-view';
     $have_switcher = false;
+
+} elseif($listing_view == 'grid-view-v7') {
+    $wrap_class = 'listing-v7';
+    $item_layout = 'v7';
+    $view_class = 'grid-view';
+    $have_switcher = false;
+
+} elseif($listing_view == 'list-view-v7') {
+    $wrap_class = 'listing-v7';
+    $item_layout = 'list-v7';
+    $view_class = 'list-view';
+    $have_switcher = false;
+    $card_deck = '';
 
 } else {
     $wrap_class = 'listing-v1';
@@ -140,7 +156,7 @@ if( $total_listing_found > 1 ) {
                     </div><!-- d-flex -->
                 </div><!-- listing-tools-wrap -->
 
-                <div class="listing-view <?php echo esc_attr($view_class).' '.esc_attr($cols_in_row); ?> card-deck">
+                <div class="listing-view <?php echo esc_attr($view_class).' '.esc_attr($cols_in_row).' '.esc_attr($card_deck); ?>">
                     <?php
                     if ( $wp_query->have_posts() ) :
                         while ( $wp_query->have_posts() ) : $wp_query->the_post();

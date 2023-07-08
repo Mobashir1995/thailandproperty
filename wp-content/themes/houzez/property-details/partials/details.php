@@ -52,7 +52,7 @@ $additional_features = get_post_meta( get_the_ID(), 'additional_features', true)
 	                <span>'.esc_attr( $bedrooms ).'</span>
                 </li>';
         }
-        if( $rooms != "" && $hide_fields['rooms'] != 1 ) {
+        if( $rooms != "" && ( isset($hide_fields['rooms']) && $hide_fields['rooms'] != 1 ) ) {
             $rooms_label = ($rooms > 1 ) ? houzez_option('spl_rooms', 'Rooms') : houzez_option('spl_room', 'Room');
 
             echo '<li>

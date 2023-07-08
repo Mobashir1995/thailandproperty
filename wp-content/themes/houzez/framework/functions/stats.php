@@ -82,13 +82,20 @@ if(!function_exists('houzez_realtor_stats')) {
 
         } elseif(is_singular('houzez_agent')) {
 
-        	$meta_query[] = array(
-	            'key' => $meta_key,
-	            'value' => $meta_value,
-	            'type' => 'CHAR',
-	            'compare' => '=',
-	        );
-        	$args['meta_query'] = $meta_query;
+        	$args['meta_query'] = array(
+                'relation' => 'AND',
+                array(
+		            'key'     => $meta_key,
+		            'value'   => $meta_value,
+		            'compare' => '='
+		        ),
+		        array(
+		            'key'     => 'fave_agent_display_option',
+		            'value'   => 'agent_info',
+		            'compare' => '='
+		        )
+            );
+
 
         } elseif(is_author()) {
         	$args['author'] = $author_id;

@@ -11,10 +11,30 @@ if ( get_query_var('paged') ) {
     $paged = 1;
 }
 
-global $wp_query;
+$number_of_agencies = houzez_option('num_of_agencies');
+if(!$number_of_agencies){
+    $number_of_agencies = 9;
+}
+
 $args = array(
     'post_type' => 'houzez_agency',
-    'paged'           => $paged
+    'posts_per_page' => $number_of_agencies,
+    'paged' => $paged,
+    'post_status' => 'publish',
+    'meta_query' => array(
+        'relation' => 'OR',
+            array(
+             'key' => 'fave_agency_visible',
+             'compare' => 'NOT EXISTS', // works!
+             'value' => '' // This is ignored, but is necessary...
+            ),
+            array(
+             'key' => 'fave_agency_visible',
+             'value' => 1,
+             'type' => 'NUMERIC',
+             'compare' => '!=',
+            )
+    )
 );
 
 /* Keyword Based Search */
@@ -27,6 +47,12 @@ if( isset ( $_GET['agency_name'] ) ) {
 }
 
 query_posts( $args );
+
+$agencies_layout = houzez_option('agencies-template-layout', 'v1');
+
+if( isset( $_GET['agencies-layout'] ) && $_GET['agencies-layout'] != "" ) {
+    $agencies_layout = esc_html($_GET['agencies-layout']);
+}
 ?>
 
 <section class="listing-wrap">
@@ -38,29 +64,53 @@ query_posts( $args );
         </div><!-- page-title-wrap -->
 
         <div class="row">
-            <div class="col-lg-8 col-md-12 bt-content-wrap right-bt-content-wrap">
+            
+            <?php if( $agencies_layout == 'v2' ) { ?>
 
-                <div class="agents-list-view">
-                    <?php
-                    if ( have_posts() ) :
-                    while ( have_posts() ) : the_post();
-
-                            get_template_part('template-parts/realtors/agency/list');
-
-                    endwhile;
+                <div class="col-lg-12 col-md-12">
                     
-                    else:
-                        get_template_part('template-parts/realtors/agency/none');
-                    endif;
-                    ?>
-                </div><!-- listing-view -->
-                
-                <?php houzez_pagination( $wp_query->max_num_pages ); wp_reset_query(); ?>
+                    <div class="agencies-grid-view agencies-grid-view-4cols">
+                        <?php
+                        if ( have_posts() ) :
+                        while ( have_posts() ) : the_post();
 
-            </div><!-- bt-content-wrap -->
-            <div class="col-lg-4 col-md-12 bt-sidebar-wrap left-bt-sidebar-wrap <?php if( $sticky_sidebar['agency_sidebar'] != 0 ){ echo 'houzez_sticky'; }?>">
-                <?php get_sidebar('agencies'); ?>
-            </div><!-- bt-sidebar-wrap -->
+                                get_template_part('template-parts/realtors/agency/agency-grid');
+
+                        endwhile;
+                        
+                        else:
+                            get_template_part('template-parts/realtors/agency/none');
+                        endif;
+                        ?>
+                    </div><!-- listing-view -->
+                    <?php houzez_pagination( $wp_query->max_num_pages ); wp_reset_query(); ?>
+                </div><!-- bt-content-wrap -->
+
+            <?php } else { ?>
+                <div class="col-lg-8 col-md-12 bt-content-wrap right-bt-content-wrap">
+
+                    <div class="agents-list-view">
+                        <?php
+                        if ( have_posts() ) :
+                        while ( have_posts() ) : the_post();
+
+                                get_template_part('template-parts/realtors/agency/list');
+
+                        endwhile;
+                        
+                        else:
+                            get_template_part('template-parts/realtors/agency/none');
+                        endif;
+                        ?>
+                    </div><!-- listing-view -->
+                    
+                    <?php houzez_pagination( $wp_query->max_num_pages ); wp_reset_query(); ?>
+
+                </div><!-- bt-content-wrap -->
+                <div class="col-lg-4 col-md-12 bt-sidebar-wrap left-bt-sidebar-wrap <?php if( $sticky_sidebar['agency_sidebar'] != 0 ){ echo 'houzez_sticky'; }?>">
+                    <?php get_sidebar('agencies'); ?>
+                </div><!-- bt-sidebar-wrap -->
+            <?php } ?>
         </div><!-- row -->
     </div><!-- container -->
 </section><!-- listing-wrap -->

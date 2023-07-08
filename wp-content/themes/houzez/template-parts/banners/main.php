@@ -69,11 +69,11 @@ if( houzez_search_needed() ) {
         }
     } else {
         
-        if ($search_enable != 0 && $search_position == 'under_banner') {
+        if ($search_enable != 0 && $search_position == 'under_banner') { 
 
-            if( wp_is_mobile() ) {
+            if( wp_is_mobile() ) { 
                 get_template_part('template-parts/search/mobile-search-main');
-            } else {
+            } else { 
                 if ($search_pages == 'only_home') {
                     if (is_front_page()) {
                         get_template_part('template-parts/search/main'); 
@@ -81,8 +81,8 @@ if( houzez_search_needed() ) {
                 } elseif ($search_pages == 'all_pages') {
                     get_template_part('template-parts/search/main'); 
 
-                } elseif ($search_pages == 'only_innerpages') {
-                    if (!is_front_page()) {
+                } elseif ($search_pages == 'only_innerpages') { 
+                    if (!is_front_page()) { 
                         get_template_part('template-parts/search/main'); 
                     }
                 } else if( $search_pages == 'specific_pages' ) {

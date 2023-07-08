@@ -60,7 +60,7 @@ class houzez_contact_us extends WP_Widget {
 	                    <li><i class="houzez-icon icon-pin mr-1"></i> <?php echo esc_attr( $address ); ?></li>
 	                    <?php } ?>
 
-	                    <?php if( !empty($phone) ) { ?>
+	                    <?php if( !empty($phoneCall) ) { ?>
 	                    <li><i class="houzez-icon icon-phone mr-1"></i> <a href="tel:<?php echo esc_attr($phoneCall);?>"><?php echo esc_attr( $phoneNumber ); ?></a></li>
 	                    <?php } ?>
 

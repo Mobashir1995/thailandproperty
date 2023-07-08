@@ -141,10 +141,10 @@ if ( !function_exists( 'houzez_start_thread_filter' ) ) {
 		$id = $wpdb->insert(
 			$table_name,
 			array(
-				'sender_id' => $sender_id,
-				'receiver_id' => $receiver_id,
-				'property_id' => $property_id,
-				'time'	=> current_time( 'mysql' )
+				'sender_id' => intval( $sender_id ),
+				'receiver_id' => intval( $receiver_id ),
+				'property_id' => intval( $property_id ),
+				'time' => current_time( 'mysql' )
 			),
 			array(
 				'%d',
@@ -206,7 +206,7 @@ if ( !function_exists( 'houzez_thread_message_filter' ) ) {
 			array( '%d' )
 		);
 
-		$message_query = "SELECT * FROM $table WHERE id = $thread_id";
+		$message_query = $wpdb->prepare( "SELECT * FROM $table WHERE id = %d", $thread_id );
 		$houzez_thread = $wpdb->get_row( $message_query );
 		$receiver_id = $houzez_thread->sender_id;
 
@@ -295,7 +295,7 @@ if ( !function_exists( 'houzez_messages_notification' ) ) {
 			$wpdb->prepare(
 		        "SELECT * FROM {$table} WHERE seen = '0' AND ( sender_id = %d OR receiver_id = %d )",
 		        $userID,
-		        $userID,
+		        $userID
 		    )
 		);
 
@@ -384,7 +384,7 @@ if ( !function_exists( 'houzez_chcek_messages_notifications' ) ) {
 			$wpdb->prepare(
 		        "SELECT * FROM {$table} WHERE seen = '0' AND ( sender_id = %d OR receiver_id = %d )",
 		        $userID,
-		        $userID,
+		        $userID
 		    )
 		);
 

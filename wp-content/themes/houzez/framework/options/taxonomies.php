@@ -64,13 +64,28 @@ Redux::setSection( $houzez_opt_name, array(
                     'list-view-v2' => 'List View',
                     'grid-view-v2' => 'Grid View',
                 ),
-                'grid-view-v3' => 'Grid View v3',
-                'grid-view-v4' => 'Grid View v4',
+
+                'Listings Version 3' => array(
+                    'grid-view-v3' => 'Grid View',
+                ),
+
+                'Listings Version 4' => array(
+                    'grid-view-v4' => 'Grid View',
+                ),
+
                 'Listings Version 5' => array(
                     'list-view-v5' => 'List View',
                     'grid-view-v5' => 'Grid View',
                 ),
-                'grid-view-v6' => 'Grid View v6',
+
+                'Listings Version 6' => array(
+                    'grid-view-v6' => 'Grid View',
+                ),
+
+                'Listings Version 7' => array(
+                    'list-view-v7' => 'List View',
+                    'grid-view-v7' => 'Grid View',
+                ),
             ),
             'default' => 'list-view-v1'
         ),

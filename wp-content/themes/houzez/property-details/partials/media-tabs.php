@@ -57,7 +57,7 @@ if ($media_tabs): foreach ($media_tabs as $key=>$value) {
 				<?php get_template_part('property-details/partials/gallery-variable-width'); ?>
 			</div>
 
-		<?php } elseif( $top_area == 'v1' || $top_area == 'v6' ) { ?>
+		<?php } elseif( $top_area == 'v1' || $top_area == 'v6' || $top_area == 'v7' ) { ?>
 
 			<div class="tab-pane <?php echo esc_attr($gallery_active); ?>" id="pills-gallery" role="tabpanel" aria-labelledby="pills-gallery-tab" style="background-image: url(<?php echo esc_url($featured_image_url); ?>);">
 				<?php get_template_part('property-details/partials/image-count'); ?>

@@ -19,7 +19,7 @@ global $wp_version;
 */
 define( 'HOUZEZ_THEME_NAME', 'Houzez' );
 define( 'HOUZEZ_THEME_SLUG', 'houzez' );
-define( 'HOUZEZ_THEME_VERSION', '2.7.3' );
+define( 'HOUZEZ_THEME_VERSION', '2.8.3.1' );
 define( 'HOUZEZ_FRAMEWORK', get_template_directory() . '/framework/' );
 define( 'HOUZEZ_WIDGETS', get_template_directory() . '/inc/widgets/' );
 define( 'HOUZEZ_INC', get_template_directory() . '/inc/' );
@@ -53,6 +53,7 @@ if ( ! function_exists( 'houzez_setup' ) ) {
 		add_theme_support( 'post-thumbnails' );
 		add_image_size( 'houzez-gallery', 1170, 785, true);	
 		add_image_size( 'houzez-item-image-1', 592, 444, true );
+		add_image_size( 'houzez-top-v7', 780, 780, true );
 		add_image_size( 'houzez-item-image-4', 758, 564, true );
 		add_image_size( 'houzez-item-image-6', 584, 438, true );
 		add_image_size( 'houzez-variable-gallery', 0, 600, false );
@@ -177,6 +178,7 @@ require_once( HOUZEZ_FRAMEWORK . 'functions/menu-walker.php');
 require_once( HOUZEZ_FRAMEWORK . 'functions/mobile-menu-walker.php');
 require_once( HOUZEZ_FRAMEWORK . 'functions/review.php');
 require_once( HOUZEZ_FRAMEWORK . 'functions/stats.php');
+require_once( HOUZEZ_FRAMEWORK . 'functions/agency_agents.php');
 require_once( HOUZEZ_FRAMEWORK . 'admin/menu/menu.php');
 
 
@@ -247,10 +249,16 @@ if( houzez_theme_verified() ) {
 require_once( HOUZEZ_FRAMEWORK . 'options/remove-tracking-class.php' ); // Remove tracking
 require_once( HOUZEZ_FRAMEWORK . 'options/houzez-option.php' );
 
-if ( class_exists( 'ReduxFramework' ) ) {
-	require_once(get_theme_file_path('/framework/options/houzez-options.php'));
-	require_once(get_theme_file_path('/framework/options/main.php'));
+if( ! function_exists( 'houzez_load_redux_config' ) ) {
+	function houzez_load_redux_config() {
+		if ( class_exists( 'ReduxFramework' ) ) {
+			require_once(get_theme_file_path('/framework/options/houzez-options.php'));
+			require_once(get_theme_file_path('/framework/options/main.php'));
+		}
+	}
 }
+add_action('after_setup_theme', 'houzez_load_redux_config', 20);
+
 
 /**
  *	----------------------------------------------------------------
@@ -285,7 +293,7 @@ if ( class_exists( 'ReduxFramework' ) ) {
 }
 
 if ( defined( 'ELEMENTOR_VERSION' ) ) {
-	//require get_template_directory() . '/inc/blocks/blocks.php';
+	require get_template_directory() . '/inc/blocks/blocks.php';
 }
 
 /**
@@ -581,17 +589,16 @@ if(!function_exists('houzez_hide_admin_bar')) {
 
 if ( !function_exists( 'houzez_block_users' ) ) {
 
-	add_action( 'init', 'houzez_block_users' );
+	add_action( 'admin_init', 'houzez_block_users' );
 
 	function houzez_block_users() {
 		$users_admin_access = houzez_option('users_admin_access');
 
-		if( is_user_logged_in() ) {
-			if ($users_admin_access != 0) {
-				if (is_admin() && !current_user_can('administrator') && isset( $_GET['action'] ) != 'delete' && !(defined('DOING_AJAX') && DOING_AJAX)) {
-					wp_die(esc_html("You don't have permission to access this page.", "Houzez"));
-					exit;
-				}
+		if( is_user_logged_in() && $users_admin_access && !houzez_is_demo() ) {
+			
+			if (is_admin() && !current_user_can('administrator') && isset( $_GET['action'] ) != 'delete' && !(defined('DOING_AJAX') && DOING_AJAX)) {
+				wp_die(esc_html("You don't have permission to access this page.", "Houzez"));
+				exit;
 			}
 		}
 	}
@@ -638,4 +645,24 @@ if( ! function_exists('houzez_save_custom_options_for_cron') ) {
         update_option('houzez_custom_days', $custom_days);
 
     }
+}
+
+if( ! function_exists( 'houzez_is_mobile_filter' ) ) {
+	function houzez_is_mobile_filter( $is_mobile ) {
+		if ( empty( $_SERVER['HTTP_USER_AGENT'] ) ) {
+			$is_mobile = false;
+		} elseif ( strpos( $_SERVER['HTTP_USER_AGENT'], 'Mobile' ) !== false // Many mobile devices (all iPhone, iPad, etc.)
+			|| strpos( $_SERVER['HTTP_USER_AGENT'], 'Android' ) !== false
+			|| strpos( $_SERVER['HTTP_USER_AGENT'], 'Silk/' ) !== false
+			|| strpos( $_SERVER['HTTP_USER_AGENT'], 'Kindle' ) !== false
+			|| strpos( $_SERVER['HTTP_USER_AGENT'], 'BlackBerry' ) !== false
+			|| strpos( $_SERVER['HTTP_USER_AGENT'], 'Opera Mini' ) !== false
+			|| strpos( $_SERVER['HTTP_USER_AGENT'], 'Opera Mobi' ) !== false ) {
+				$is_mobile = true;
+		} else {
+			$is_mobile = false;
+		}
+		return $is_mobile ;
+	}
+	add_filter( 'wp_is_mobile', 'houzez_is_mobile_filter' );
 }

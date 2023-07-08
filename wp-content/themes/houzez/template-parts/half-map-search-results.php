@@ -7,6 +7,7 @@ $enable_save_search = houzez_option('enable_disable_save_search');
 $page_content_position = houzez_get_listing_data('listing_page_content_area');
 
 $have_switcher = true;
+$card_deck = 'card-deck';
 
 $wrap_class = $item_layout = $view_class = $cols_in_row = '';
 if($listing_view == 'list-view-v1') {
@@ -57,7 +58,24 @@ if($listing_view == 'list-view-v1') {
     $view_class = 'grid-view';
     $have_switcher = false;
 
-} 
+} elseif($listing_view == 'grid-view-v7') {
+    $wrap_class = 'listing-v7';
+    $item_layout = 'v7';
+    $view_class = 'grid-view';
+    $have_switcher = false;
+
+} elseif($listing_view == 'list-view-v7') {
+    $wrap_class = 'listing-v7';
+    $item_layout = 'list-v7';
+    $view_class = 'list-view';
+    $have_switcher = false;
+    $card_deck = '';
+
+} else {
+    $wrap_class = 'listing-v1';
+    $item_layout = 'v1';
+    $view_class = 'grid-view';
+}
 
 $number_of_prop = $search_num_posts;
 if(!$number_of_prop){
@@ -151,7 +169,7 @@ if($enable_search != 0 && $search_style != 'v4') {
             }?>
 
             <div id="houzez_ajax_container">
-                <div class="card-deck">
+                <div class="<?php echo esc_attr($card_deck);?>">
                 <?php
                 if ( $search_query->have_posts() ) :
                     while ( $search_query->have_posts() ) : $search_query->the_post();

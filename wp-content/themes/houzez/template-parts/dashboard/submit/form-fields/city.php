@@ -12,7 +12,7 @@ if (houzez_edit_property()) {
 	
 	<?php
 	if(houzez_option('location_dropdowns') == 'yes') { ?>
-		<select name="locality" id="city" data-city="<?php echo esc_attr($city); ?>" data-target="houzezFourthList" <?php houzez_required_field_2('city'); ?> class="houzezSelectFilter houzezThirdList selectpicker form-control bs-select-hidden"  data-size="5" data-none-results-text="<?php echo houzez_option('cl_no_results_matched', 'No results matched');?> {0}" data-live-search="true">
+		<select name="locality" id="city" data-city="<?php echo urldecode($city); ?>" data-target="houzezFourthList" <?php houzez_required_field_2('city'); ?> class="houzezSelectFilter houzezThirdList selectpicker form-control bs-select-hidden"  data-size="5" data-none-results-text="<?php echo houzez_option('cl_no_results_matched', 'No results matched');?> {0}" data-live-search="true">
             <?php
 	        if (houzez_edit_property()) {
 	            global $property_data;

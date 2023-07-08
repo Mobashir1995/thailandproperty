@@ -173,7 +173,6 @@
         }
     });
 
-
     /* ------------------------------------------------------------------------ */
     /*  lazy load
     /* ------------------------------------------------------------------------ */
@@ -335,6 +334,7 @@
                         houzez_init_remove_favorite(ajaxurl, userID);
                         houzez_listing_lightbox(ajaxurl, processing_text, houzez_rtl, userID);
                         houzez_grid_image_gallery();
+                        houzez_grid_call_to_action();
                         compare_for_ajax();
                         $('[data-toggle="tooltip"]').tooltip();
                     },
@@ -516,6 +516,7 @@
             options.closeOnScroll = false;
             options.bgOpacity = 0.95;
             options.showHideOpacity = false;
+            options.history = false
 
             // PhotoSwipe opened from URL
             if(fromURL) {
@@ -961,6 +962,7 @@
     /* ------------------------------------------------------------------------ */ 
     $(window).on('load', function() {
         houzez_grid_image_gallery();
+        houzez_grid_call_to_action();
     });
 
     /* ------------------------------------------------------------------------ */
@@ -1392,6 +1394,7 @@
                     houzez_init_remove_favorite(ajaxurl, userID);
                     houzez_listing_lightbox(ajaxurl, processing_text, houzez_rtl, userID);
                     houzez_grid_image_gallery();
+                    houzez_grid_call_to_action();
                     compare_for_ajax();
                     $('[data-toggle="tooltip"]').tooltip();
 
@@ -3074,10 +3077,15 @@
     /* ------------------------------------------------------------------------ */
     // disable touch
     if($('.nav-mobile').length > 0 ) {
+
+        var smm_transform = 256;
+        if ( houzez_rtl ) {
+            smm_transform = -256;
+        }
         var slideout_left = new Slideout({
             'panel': document.getElementById('main-wrap'),
             'menu': document.getElementById('nav-mobile'),
-            'padding': 256,
+            'padding': smm_transform,
             'tolerance': 70,
             'side': 'left',
             'easing': 'cubic-bezier(.32,2,.55,.27)'
@@ -3086,10 +3094,14 @@
     }
 
     if($('#main-wrap').length > 0 ) {
+        var smd_transform = 256;
+        if ( houzez_rtl ) {
+            smd_transform = -256;
+        }
         var slideout_right = new Slideout({
             'panel': document.getElementById('main-wrap'),
             'menu': document.getElementById('navi-user'),
-            'padding': 256,
+            'padding': smd_transform,
             'tolerance': 70,
             'side': 'right',
             'easing': 'cubic-bezier(.32,2,.55,.27)'
@@ -3958,7 +3970,7 @@ function houzez_grid_image_gallery() {
 
                 var html = '<div class="listing-gallery-wrap '+gallery_behaviour+'"><div class="houzez-listing-carousel">';
                 images.forEach(function(img_url, index){
-                    html += '<div class="item"><a href="'+ href +'"><img src="'+img_url+'" class="img-fluid"></a></div>';
+                    html += '<div class="item"><a href="'+ href +'"><img src="'+img_url.image+'" alt="'+img_url.alt+'" class="img-fluid"></a></div>';
                 });
                 html += '</div></div>';
                 jQuery(this).find('.listing-image-wrap .listing-thumb').append(html);
@@ -4332,5 +4344,25 @@ function remove_from_compare(listings_compare, compare_add_icon, compare_remove_
         jQuery('.compare-'+listing_id).tooltip('hide').attr('data-original-title', add_compare_text);
         jQuery('.compare-'+listing_id).find('i').removeClass('icon-subtract-circle').addClass('icon-add-circle');
         jQuery(this).parents('.compare-item').remove();
+    });
+}
+
+/* ------------------------------------------------------------------------ */
+/*  mobile popup js
+/* ------------------------------------------------------------------------ */
+
+function houzez_grid_call_to_action() {
+    jQuery('.hz-call-popup-js').on('click', function() {
+        var call_model_id = jQuery(this).data('model-id');
+        jQuery('#'+call_model_id).appendTo("body");
+        jQuery('#'+call_model_id).modal("show");
+
+    });
+
+    jQuery('.hz-email-popup-js').on('click', function() {
+        var email_model_id = jQuery(this).data('model-id');
+        jQuery('#'+email_model_id).appendTo("body");
+        jQuery('#'+email_model_id).modal("show");
+
     });
 }

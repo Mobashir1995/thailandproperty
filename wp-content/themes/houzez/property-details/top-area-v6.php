@@ -120,6 +120,7 @@ $layout = $layout['enabled'];
 
 	    function openGallery(j) {
 	      options.index = parseInt(j);
+	      options.history = false;
 	      gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
 	      gallery.init();
 	    }

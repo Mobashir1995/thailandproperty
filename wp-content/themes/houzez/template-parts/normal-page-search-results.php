@@ -13,8 +13,10 @@ $search_num_posts = houzez_option('search_num_posts');
 $enable_save_search = houzez_option('enable_disable_save_search');
 
 $have_switcher = true;
+$card_deck = 'card-deck';
 
 $wrap_class = $item_layout = $view_class = $cols_in_row = '';
+
 if($listing_view == 'list-view-v1') {
     $wrap_class = 'listing-v1';
     $item_layout = 'v1';
@@ -63,7 +65,24 @@ if($listing_view == 'list-view-v1') {
     $view_class = 'grid-view';
     $have_switcher = false;
 
-} 
+} elseif($listing_view == 'grid-view-v7') {
+    $wrap_class = 'listing-v7';
+    $item_layout = 'v7';
+    $view_class = 'grid-view';
+    $have_switcher = false;
+
+} elseif($listing_view == 'list-view-v7') {
+    $wrap_class = 'listing-v7';
+    $item_layout = 'list-v7';
+    $view_class = 'list-view';
+    $have_switcher = false;
+    $card_deck = '';
+
+} else {
+    $wrap_class = 'listing-v1';
+    $item_layout = 'v1';
+    $view_class = 'grid-view';
+}
 
 if($view_class == 'grid-view' && $search_result_layout == 'no-sidebar') {
     $cols_in_row = 'grid-view-3-cols';
@@ -90,6 +109,7 @@ if(!$number_of_prop){
 if ( is_front_page()  ) {
     $paged = (get_query_var('page')) ? get_query_var('page') : 1;
 }
+
 $search_qry = array(
     'post_type' => 'property',
     'posts_per_page' => $number_of_prop,
@@ -161,7 +181,7 @@ if( $total_records > 1 ) {
 
                 </div><!-- listing-tools-wrap -->
 
-                <div class="listing-view <?php echo esc_attr($view_class).' '.esc_attr($cols_in_row); ?> card-deck">
+                <div class="listing-view <?php echo esc_attr($view_class).' '.esc_attr($cols_in_row).' '.esc_attr($card_deck); ?>">
                     <?php
                     if ( $search_query->have_posts() ) :
                         while ( $search_query->have_posts() ) : $search_query->the_post();
