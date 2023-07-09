@@ -236,7 +236,7 @@ if ( !function_exists( 'houzez_get_auto_complete_search' ) ) {
                                     </ul>
                                 </div><!-- auto-complete-content-wrap -->
                                 <div class="auto-complete-content-wrap ml-3">
-                                    <u class="search-result-view"><?php echo $houzez_local['auto_view_lists']; ?></u>
+                                    <span class="search-result-view"><?php echo $houzez_local['auto_view_lists']; ?></span>
                                 </div><!-- auto-complete-content-wrap -->
                             </div><!-- d-flex -->
                         </a>

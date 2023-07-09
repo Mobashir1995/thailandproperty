@@ -17,3 +17,4 @@ package-lock.json
 
 # !wp-content/plugins/hvac-sizing-calculator
 !wp-content/themes/
+wp-content/themes/houzez-child-old/
